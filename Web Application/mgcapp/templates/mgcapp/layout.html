@@ -1,22 +1,48 @@
-{# Load the tag library #}
-{% load bootstrap5 %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>{% block title %}{% endblock %}</title>
+    {% load static %}
+    {# Load the tag library #}
+    {% load bootstrap5 %}
 
-{# Load CSS and JavaScript #}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
+    {# Load CSS and JavaScript #}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
 
-{# Display django.contrib.messages as Bootstrap alerts #}
-{% bootstrap_messages %}
+    {# Display django.contrib.messages as Bootstrap alerts #}
+    {% bootstrap_messages %}
+</head>
 
-{# Display a form #}
-<form action="/url/to/submit/" method="post" class="form">
-  {% csrf_token %}
-  {% bootstrap_form form %}
-  {% buttons %}
-    <button type="submit" class="btn btn-primary">
-      Submit
-    </button>
-  {% endbuttons %}
-</form>
+<body>
 
-{# Read the documentation for more information #}
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+
+    <div class="collapse navbar-collapse" id="navbarColor02">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a href="{% url 'home' %}" class="nav-link">Music Genre Classification<span class="sr-only"></span></a>
+            </li>
+            {% comment %} <li class="nav-item">
+                <a href="{% url 'history' %}" class="nav-link">History</a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'Average' %}" class="nav-link">Averag per Week</a>
+            </li> {% endcomment %}
+        </ul>
+    </div>
+</nav>
+<h1></h1>
+
+
+<div class="body-content">
+    {% block content %}
+    {% endblock %}
+    <hr/>
+    <footer>
+        <p> The Smash Group © 2022</p>
+    </footer>
+</div>
+</body>
+</html>
