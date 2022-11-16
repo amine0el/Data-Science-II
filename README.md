@@ -6,6 +6,7 @@ first you should have an envirement. if you work with pycharm is already initial
 python -m venv .env
 ```
 In VS Code, open the Command Palette (View > Command Palette or (⇧⌘P)). Then select the Python: Select Interpreter command
+
 ---
 to install the Packeges required run this code im Terminal or CMD
 
