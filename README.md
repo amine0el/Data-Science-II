@@ -25,3 +25,7 @@ and run this commands
 ```
 python manage.py runserver
 ```
+
+
+
+data/genres_original/jazz/jazz.00054.wav hat ein fehler
