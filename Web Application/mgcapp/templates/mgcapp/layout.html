@@ -19,7 +19,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
 
-    <div class="collapse navbar-collapse" id="navbarColor02">
+    <div class="collapse navbar-collapse justify-content-center" id="navbarColor02">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
               <a href="{% url 'home' %}" class="nav-link">Music Genre Classification<span class="sr-only"></span></a>
@@ -27,10 +27,10 @@
              <li class="nav-item">
                 <a href="{% url 'upload' %}" class="nav-link">Upload file</a>
             </li>
-            {% comment %}
+            
             <li class="nav-item">
-                <a href="{% url 'Average' %}" class="nav-link">Averag per Week</a>
-            </li> {% endcomment %}
+                <a href="{% url 'model_form_upload' %}" class="nav-link">modelUpload</a>
+            </li> 
         </ul>
     </div>
 </nav>
@@ -40,10 +40,12 @@
 <div class="body-content">
     {% block content %}
     {% endblock %}
-    <hr/>
-    <footer>
-        <p> The Smash Group © 2022</p>
-    </footer>
+    
+    <div class="navbar fixed-bottom">
+        <footer>
+            <p> The Smash Group © 2022</p>
+        </footer>
+    </div>
 </div>
 </body>
 </html>
