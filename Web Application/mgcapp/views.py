@@ -11,14 +11,23 @@ def home(request):
 
 
 def simple_upload(request):
-    if request.method == 'POST' and request.FILES['myfile']:
-        myfile = request.FILES['myfile']
-        fs = FileSystemStorage()
-        filename = fs.save(myfile.name, myfile)
-        uploaded_file_url = fs.url(filename)
-        return render(request, 'mgcapp/upload.html', {
-            'uploaded_file_url': uploaded_file_url
-        })
+    if request.method == 'POST':
+        data = request.POST
+        action = data.get("type")
+        if action == "genre":
+            genre = "Rock"
+            return render(request, 'mgcapp/upload.html', {
+                    'genre': genre
+            })
+        elif action == "file" and 'myfile' in request.FILES:
+            myfile = request.FILES['myfile']
+            fs = FileSystemStorage()
+            filename = fs.save(myfile.name, myfile)
+            uploaded_file_url = fs.url(filename)
+            return render(request, 'mgcapp/upload.html', {
+                'uploaded_file_url': uploaded_file_url
+            })
+   
     return render(request, 'mgcapp/upload.html')
 
 def model_form_upload(request):

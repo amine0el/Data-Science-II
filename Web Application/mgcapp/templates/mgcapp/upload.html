@@ -18,13 +18,22 @@
                 <input class="form-control" type="file" id="formFile" name="myfile" >
               </div>
             <div class="mb-3" align="center">
-                <button type="submit" class="btn btn-primary">Upload</button>
+                <button type="submit" class="btn btn-primary" name="type" value="file">Upload</button>
             </div>
-          </form>
+          
           {% if uploaded_file_url %}
-          <p>File uploaded at: <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a></p>
+          <p>File uploaded! Click on Link to listen: </p>
+            <p><a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a></p>
+           
+            <div class="mb-3" align="center">
+            <button type="submit" class="btn btn-primary" name="type" value="genre">Get predicted Genre</button>
+        </div>
+        
             {% endif %}
-      
+            {% if genre %}
+            <p>The predicted genre is: 
+              <p><b>{{ genre }}</b> </p></p>  
+              {% endif %}
             <p><a href="{% url 'home' %}">Return to home</a></p>
       </div>
       <div class="col">
