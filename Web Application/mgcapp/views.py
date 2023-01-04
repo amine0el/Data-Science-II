@@ -21,22 +21,13 @@ def simple_upload(request):
             
             
             return redirect('prediction')
-        elif action == "statistic":
-            pred_time_series()
-            return render(request, 'mgcapp/upload.html', {
-                    'more_stat': "Here are your Statistics:"
-                })
         elif action == "file" and 'myfile' in request.FILES:
             myfile = request.FILES['myfile']
             if (".mp3" or ".wav") in myfile.name:
-                
-                fs = FileSystemStorage()
-                filename = fs.save(myfile.name, myfile)
-                uploaded_file_url = fs.url(filename)
                 qs = Document(name=myfile.name,document=myfile)
                 qs.save()
-                return render(request, 'mgcapp/upload.html', {
-                    'uploaded_file_url': uploaded_file_url,
+                return render(request, 'mgcapp/upload.html',{
+                    'uploaded_file_url':True
                 })
             else:
                 return render(request, 'mgcapp/upload.html', {

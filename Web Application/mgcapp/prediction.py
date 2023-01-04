@@ -140,15 +140,16 @@ def pred_time_series():
 
 # Plot the genres to the time series of the start times !!Attention: Plot does not show empty points!!
     fig, ax = plt.subplots()
-    fig.set_size_inches(20,10)
-    plt.xlabel("Time [min]")
+    fig.set_size_inches(8,5)
+    plt.title("Predictions over Time")
     plt.ylabel("Genres")
     prediction_label=[]
     for i in range(len(preds)):
         prediction_label.append(my_dict[preds[i]])
     time = pd.to_datetime(start, unit='s').dt.strftime('%M:%S')
-    plt.xticks(rotation=-45)
+    plt.xticks(rotation=-90)
     ax.scatter(time, prediction_label, linewidth=2.0)
+    plt.xlabel("Time [min]")
     plt.savefig("media/last_time_series.png")
 
 # Show the Probabilities of every prediction (two main classes):
