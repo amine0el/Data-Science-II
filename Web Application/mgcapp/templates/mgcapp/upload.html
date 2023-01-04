@@ -7,39 +7,59 @@
 {% endblock %}
 {% block content %}
 <div class="container text-center">
-    <div class="row">
-      <div class="col">
-        <img src="media/logo_data_science.png" alt="logo">
-      </div>
-      <div class="col-6">
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="mb-3" align="center">
-                <label for="formFile" class="form-label">Input your file</label>
-                <input class="form-control" type="file" id="formFile" name="myfile" >
-              </div>
-            <div class="mb-3" align="center">
-                <button type="submit" class="btn btn-primary" name="type" value="file">Upload</button>
-            </div>
-          
-          {% if uploaded_file_url %}
-          <p>File uploaded! Click on Link to listen: </p>
-            <p><a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a></p>
-           
-            <div class="mb-3" align="center">
-            <button type="submit" class="btn btn-primary" name="type" value="genre">Get predicted Genre</button>
+  <div class="row">
+    <div class="col">
+      <img src="media/logo_data_science.png" alt="logo">
+    </div>
+    <div class="col-6">
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3" align="center">
+          <label for="formFile" class="form-label">Input your file</label>
+          <input class="form-control" type="file" id="formFile" name="myfile">
         </div>
-        
-            {% endif %}
-            {% if genre %}
-            <p>The predicted genre is: 
-              <p><b>{{ genre }}</b> </p></p>  
-              {% endif %}
-            <p><a href="{% url 'home' %}">Return to home</a></p>
-      </div>
-      <div class="col">
-      </div>
+        <div class="mb-3" align="center">
+          <button type="submit" class="btn btn-primary" name="type" value="file">Upload</button>
+        </div>
+
+        {% if uploaded_file_url %}
+        <p>File uploaded! Click on Link to listen: </p>
+        <p><a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a></p>
+
+        <div class="mb-3" align="center">
+          <button type="submit" class="btn btn-primary" name="type" value="genre">Get predicted Genre</button>
+        </div>
+
+        {% endif %}
+        {% if genre %}
+        <p>
+        <pre><b>{{ genre }}</b></pre>
+        </p>
+        <div class="mb-3" align="center">
+          <button type="submit" class="btn btn-primary" name="type" value="statistic">Give me more
+            Song-Statistic!</button>
+        </div>
+        {% endif %}
+        {% if more_stat %}
+        <p>
+        <pre><b>{{ more_stat }}</b></pre>
+        </p>
+        <div class="col">
+          <img src="media/last_time_series.png" alt="Time-Series">
+        </div>
+
+        {% endif %}
+        {% if format_error %}
+        <p>
+        <pre><b>{{ format_error }}</b></pre>
+        </p>
+        {% endif %}
+
+        <p><a href="{% url 'home' %}">Return to home</a></p>
+    </div>
+    <div class="col">
     </div>
   </div>
+</div>
 
 {% endblock %}

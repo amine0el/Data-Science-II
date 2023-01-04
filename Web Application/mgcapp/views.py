@@ -5,6 +5,8 @@ from django.shortcuts import render, redirect
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 
+from mgcapp.prediction import *
+
 def home(request):
     documents = Document.objects.all()
     return render(request, 'mgcapp/home.html', { 'documents': documents })
@@ -15,18 +17,31 @@ def simple_upload(request):
         data = request.POST
         action = data.get("type")
         if action == "genre":
-            genre = "Rock"
+            genre = get_binned_static()
             return render(request, 'mgcapp/upload.html', {
                     'genre': genre
             })
+        elif action == "statistic":
+            pred_time_series()
+            return render(request, 'mgcapp/upload.html', {
+                    'more_stat': "Here are your Statistics:"
+                })
         elif action == "file" and 'myfile' in request.FILES:
             myfile = request.FILES['myfile']
-            fs = FileSystemStorage()
-            filename = fs.save(myfile.name, myfile)
-            uploaded_file_url = fs.url(filename)
-            return render(request, 'mgcapp/upload.html', {
-                'uploaded_file_url': uploaded_file_url
-            })
+            if (".mp3" or ".wav") in myfile.name:
+                fs = FileSystemStorage()
+                filename = fs.save(myfile.name, myfile)
+                uploaded_file_url = fs.url(filename)
+                extract_and_save(fs.path(myfile.name),filename)
+
+                return render(request, 'mgcapp/upload.html', {
+                    'uploaded_file_url': uploaded_file_url
+                })
+            else:
+                return render(request, 'mgcapp/upload.html', {
+                    'format_error': "Please use a valid song format for example .mp3 or .wav!"
+                })
+            
    
     return render(request, 'mgcapp/upload.html')
 
