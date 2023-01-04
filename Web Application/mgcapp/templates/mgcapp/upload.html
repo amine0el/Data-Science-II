@@ -23,32 +23,16 @@
         </div>
 
         {% if uploaded_file_url %}
-        <p>File uploaded! Click on Link to listen: </p>
-        <p><a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a></p>
+        <p><b>File uploaded! ATTENTION: Prediction takes some time! </b></p>
+        
 
         <div class="mb-3" align="center">
           <button type="submit" class="btn btn-primary" name="type" value="genre">Get predicted Genre</button>
         </div>
 
         {% endif %}
-        {% if genre %}
-        <p>
-        <pre><b>{{ genre }}</b></pre>
-        </p>
-        <div class="mb-3" align="center">
-          <button type="submit" class="btn btn-primary" name="type" value="statistic">Give me more
-            Song-Statistic!</button>
-        </div>
-        {% endif %}
-        {% if more_stat %}
-        <p>
-        <pre><b>{{ more_stat }}</b></pre>
-        </p>
-        <div class="col">
-          <img src="media/last_time_series.png" alt="Time-Series">
-        </div>
-
-        {% endif %}
+        
+        
         {% if format_error %}
         <p>
         <pre><b>{{ format_error }}</b></pre>

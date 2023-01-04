@@ -6,7 +6,8 @@ class Document(models.Model):
     name = models.CharField(max_length=255, blank=True)
     document = models.FileField(upload_to='documents/')
     uploaded_at = models.DateTimeField(auto_now_add=True)
-    prediction = models.TextField(verbose_name='Prediction')
+    prediction_text = models.TextField(verbose_name='Prediction')
+    prediction = models.CharField(max_length=255, blank=True)
         
 
 

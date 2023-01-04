@@ -219,4 +219,4 @@ def get_binned_static():
     # Use the frequent value as main prediction:
     prediction=my_dict[np.bincount(preds).argmax()]
     text += "\nThe most predicted genre is:    " + prediction + " (" + repr(round(np.bincount(preds)[np.bincount(preds).argmax()]/len(preds)*100,1)) + "% of the samples)" 
-    return text
+    return prediction,text

@@ -13,15 +13,20 @@
       </div>
       <div class="col-6">
         <h1 class="display-4">GOT the beat</h1>
-        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+        <p>Welcome to the genre Classification Demo of "The Smash Group".</p>
+        <p>This project is done during the class Data Science II at the TU Darmstadt.</p>
+        <p>WiSe 2022/2023</p>
+        <h3> Here are the last 10 predicted songs: </h3>
         <ul>
           {% for obj in documents %}
-              <div class="col-3 bg-light p-3 rounded-5 center">
-                <a>{{ obj.description}}</a>
+              <div class="col-sm-6 bg-light p-3 rounded-5">
+                <a>Name: &nbsp; {{ obj.name}}</a>
+                <br><a>Prediction: &nbsp;  {{ obj.prediction}}</a>
               </div>
               <div class="col-sm-9 bg-light p-3 rounded-5">
                 <audio controls="" name="media"><source src="{{obj.document.url}}" type="audio/x-wav" autostart="false"></audio>
               </div>
+              <br>
           {% endfor %}
         </ul>
       </div>

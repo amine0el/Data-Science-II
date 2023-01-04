@@ -8,7 +8,8 @@ from django.core.files.storage import FileSystemStorage
 from mgcapp.prediction import *
 
 def home(request):
-    documents = Document.objects.all()
+    documents = Document.objects.order_by('-uploaded_at').all()
+    
     return render(request, 'mgcapp/home.html', { 'documents': documents })
 
 
@@ -17,10 +18,9 @@ def simple_upload(request):
         data = request.POST
         action = data.get("type")
         if action == "genre":
-            genre = get_binned_static()
-            return render(request, 'mgcapp/upload.html', {
-                    'genre': genre
-            })
+            
+            
+            return redirect('prediction')
         elif action == "statistic":
             pred_time_series()
             return render(request, 'mgcapp/upload.html', {
@@ -29,13 +29,14 @@ def simple_upload(request):
         elif action == "file" and 'myfile' in request.FILES:
             myfile = request.FILES['myfile']
             if (".mp3" or ".wav") in myfile.name:
+                
                 fs = FileSystemStorage()
                 filename = fs.save(myfile.name, myfile)
                 uploaded_file_url = fs.url(filename)
-                extract_and_save(fs.path(myfile.name),filename)
-
+                qs = Document(name=myfile.name,document=myfile)
+                qs.save()
                 return render(request, 'mgcapp/upload.html', {
-                    'uploaded_file_url': uploaded_file_url
+                    'uploaded_file_url': uploaded_file_url,
                 })
             else:
                 return render(request, 'mgcapp/upload.html', {
@@ -45,14 +46,16 @@ def simple_upload(request):
    
     return render(request, 'mgcapp/upload.html')
 
-def model_form_upload(request):
-    if request.method == 'POST':
-        form = DocumentForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('home')
-    else:
-        form = DocumentForm()
-    return render(request, 'mgcapp/model_form_upload.html', {
-        'form': form
+def extraction_view(request):
+    documents = Document.objects.last()
+    extract_and_save(documents.document,documents.name)
+    pred, pred_text = get_binned_static()
+    pred_time_series()
+    documents.prediction = pred
+    documents.prediction_text = pred_text
+    documents.save()
+    return render(request, 'mgcapp/prediction.html', {
+        'document': documents
     })
+    
+
