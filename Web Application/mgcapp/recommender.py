@@ -54,8 +54,8 @@ def play_similar_song():
     index = 1;
     if(index > 5): 
     return "Index out of bounds, please stay below 5!"
-    return "Playing: " + similar_song.index[index -1]
-    song_genre = similar_song.index[index -1]
-    song_genre = song_genre.split('.')
-    songname = similar_song.index[0].split('.')
-    ipd.Audio(f'{general_path}/genres_original/' + song_genre[0] + '/' + song_genre[0] + "." + songname[1] + '.wav')
+    #return "Playing: " + similar_song.index[index -1]
+    #song_genre = similar_song.index[index -1]
+    #song_genre = song_genre.split('.')
+    #songname = similar_song.index[0].split('.')
+    #ipd.Audio(f'{general_path}/genres_original/' + song_genre[0] + '/' + song_genre[0] + "." + songname[1] + '.wav')
