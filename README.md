@@ -26,6 +26,11 @@ and run this commands
 python manage.py runserver
 ```
 
+if webserver shows an Error: "no such column: mgcapp_document.name"
+    1. Delete db.sqlite3 in "Web Application" Folder
+    2. Go To Folder "Web Application"
+    3. run "python manage.py makemigrations"
+    4. run "python manage.py migrate"
 
 
 data/genres_original/jazz/jazz.00054.wav hat ein fehler
