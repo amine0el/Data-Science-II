@@ -5,7 +5,7 @@ import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn import preprocessing
 import os
-general_path = './Data'
+general_path = '../Data'
 
 def get_extraction_data():
     # Read data
@@ -53,8 +53,8 @@ def find_similar_songs(name,part):
 def play_similar_song():
     index = 1;
     if(index > 5): 
-    return "Index out of bounds, please stay below 5!"
-    #return "Playing: " + similar_song.index[index -1]
+    #return "Index out of bounds, please stay below 5!"
+    return "Playing: " + similar_song.index[index -1]
     #song_genre = similar_song.index[index -1]
     #song_genre = song_genre.split('.')
     #songname = similar_song.index[0].split('.')
