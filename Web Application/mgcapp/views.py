@@ -65,17 +65,25 @@ def extraction_view(request):
 
     
 def recommender_view(request):
-    documents = Document.objects.last()
-    extract_and_save(documents.document,documents.name)
-    #pred, pred_text = get_binned_static()
-    #pred_time_series()
-    recom = find_similar_songs()
-    documents.recommender = recom
+    # df = load_csv("../feature_last_song.csv")
+    # string = "Last Song is : " + df['name_v'][0]
+    # df_db = load_csv("extraction.csv")
+    # new_df= combine df and df_db
+    # cosine similariry(new_df)
+    # drop songs with which starts with name_v
+    # sort df absteigend
+
+    
+    # for entries in df:
+    #     recom = find_similar_songs(df['name_v'][entries], entries)
+    #     biggest_val = recom[0]
+
+    # string += "Similar is: " + biggest_val
+    
+    #documents.recommender = recom
     #documents.prediction_text = pred_text
-    documents.save()
-    return render(request, 'mgcapp/recommender.html', {
-        'document': documents
-    })
+    #documents.save()
+    return render(request, 'mgcapp/recommender.html')
 
 
 

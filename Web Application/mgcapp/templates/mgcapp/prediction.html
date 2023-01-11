@@ -29,9 +29,12 @@
         <p>
           <pre><b>{{ document.prediction_text }}</b></pre>
           </p>
+          <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
       <div class="mb-3" align="center">
         <button type="submit" class="btn btn-primary" name="type" value="recommender">Get similar Song's</button>
-      </div>  
+      </div> 
+    </div> 
       <p>
       <pre><b>{{ more_stat }}</b></pre>
       </p>
