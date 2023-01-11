@@ -8,6 +8,7 @@ class Document(models.Model):
     uploaded_at = models.DateTimeField(auto_now_add=True)
     prediction_text = models.TextField(verbose_name='Prediction')
     prediction = models.CharField(max_length=255, blank=True)
+    recommender = models.CharField(max_length=255, blank=True)
         
 
 

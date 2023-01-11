@@ -18,7 +18,7 @@
           {% if document %}
               <div class="col-sm-6 bg-light p-3 rounded-5 center">
                 <a>Name: &nbsp; {{ document.name}}</a>
-                <a>&emsp;Prediction: &nbsp;  {{ document.prediction}}</a>
+                <a>&emsp;Recommendation: &nbsp;  {{ document.recommender}}</a>
               </div>
               <div class="col-sm-9 bg-light p-3 rounded-5">
                 <audio controls="" name="media"><source src="{{document.document.url}}" type="audio/x-wav" autostart="false"></audio>
@@ -26,18 +26,8 @@
 
           
         </ul>
-        <p>
-          <pre><b>{{ document.prediction_text }}</b></pre>
-          </p>
-      <div class="mb-3" align="center">
-        <button type="submit" class="btn btn-primary" name="type" value="recommender">Get similar Song's</button>
-      </div>  
-      <p>
-      <pre><b>{{ more_stat }}</b></pre>
-      </p>
-      <div>
-        <img src="media/last_time_series.png" alt="Time-Series" class="center">
-      </div>
+        
+
         {% endif %}
       </div>
 

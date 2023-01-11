@@ -46,13 +46,13 @@ def find_similar_songs(name,part):
     
    
     # Display the 5 top matches 
-    print("\n*******\nSimilar songs to ", name)
-    print(series.head(5))
+    #print("\n*******\nSimilar songs to ", name)
+    #print(series.head(5))
     return series.head(5)
 
 def play_similar_song():
-    index = 1;
-    if(index > 5): 
+    #index = 1;
+    #if(index > 5): 
     #return "Index out of bounds, please stay below 5!"
     return "Playing: " + similar_song.index[index -1]
     #song_genre = similar_song.index[index -1]

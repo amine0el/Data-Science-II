@@ -6,6 +6,7 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 
 from mgcapp.prediction import *
+from mgcapp.recommender import *
 
 def home(request):
     documents = Document.objects.order_by('-uploaded_at').all()
@@ -38,6 +39,17 @@ def simple_upload(request):
     return render(request, 'mgcapp/upload.html')
 
 def extraction_view(request):
+    if request.method == 'POST':
+        data = request.POST
+        action = data.get("type")
+        if action == "recommender":
+            
+            
+            return redirect('recommender')
+        else: 
+            return render(request, 'mgcapp/recommender.html', {
+                    'format_error': "Something went wrong! :)"
+                })
     documents = Document.objects.last()
     extract_and_save(documents.document,documents.name)
     pred, pred_text = get_binned_static()
@@ -45,8 +57,25 @@ def extraction_view(request):
     documents.prediction = pred
     documents.prediction_text = pred_text
     documents.save()
+    
     return render(request, 'mgcapp/prediction.html', {
         'document': documents
     })
     
+
+    
+def recommender_view(request):
+    documents = Document.objects.last()
+    extract_and_save(documents.document,documents.name)
+    #pred, pred_text = get_binned_static()
+    #pred_time_series()
+    recom = find_similar_songs()
+    documents.recommender = recom
+    #documents.prediction_text = pred_text
+    documents.save()
+    return render(request, 'mgcapp/recommender.html', {
+        'document': documents
+    })
+
+
 
