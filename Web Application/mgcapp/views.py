@@ -65,7 +65,7 @@ def extraction_view(request):
 
     
 def recommender_view(request):
-    string = get_extraction_similarity()
+    string = str(get_extraction_similarity())
     #documents = Document.objects.last()
     #documents.recommender_text = get_extraction_similarity(df_combined, song_name, song_part)
     

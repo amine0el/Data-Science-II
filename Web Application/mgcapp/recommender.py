@@ -123,7 +123,7 @@ def get_extraction_similarity():
     # Display the 5 top matches 
     #print("\n*******\nSimilar songs to ", name)
     #print(series.head(5))
-    return series.head(5).toString()
+    return series.head(5)
 
 # def play_similar_song():
 #     #index = 1;
