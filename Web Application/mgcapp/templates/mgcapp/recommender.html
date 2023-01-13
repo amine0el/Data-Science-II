@@ -16,19 +16,13 @@
         
         <ul>
           <p>Test Recommender</p>
-          {% if document %}
-              <div class="col-sm-6 bg-light p-3 rounded-5 center">
-                <a>Name: &nbsp; {{ document.name}}</a>
-                <a>&emsp;Recommendation: &nbsp;  {{ document.recommender}}</a>
-              </div>
-              <div class="col-sm-9 bg-light p-3 rounded-5">
-                <audio controls="" name="media"><source src="{{document.document.url}}" type="audio/x-wav" autostart="false"></audio>
-              </div>
+          {% if recommendation %}
+              
             
           
         </ul>
         <p>
-          <pre><b>{{ document.recommender_text }}</b></pre>
+          <pre><b>{{ recommendation }}</b></pre>
           </p>
 
         {% endif %}
