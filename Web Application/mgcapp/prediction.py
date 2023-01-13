@@ -151,6 +151,7 @@ def pred_time_series():
     ax.scatter(time, prediction_label, linewidth=2.0)
     plt.xlabel("Time [min]")
     plt.savefig("media/last_time_series.png")
+    plt.close()
 
 # Show the Probabilities of every prediction (two main classes):
 def get_first_preds_proba(no_proba):
