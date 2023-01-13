@@ -6,6 +6,7 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 
 from mgcapp.prediction import *
+from mgcapp.recommender import *
 
 def home(request):
     documents = Document.objects.order_by('-uploaded_at').all()
@@ -38,6 +39,17 @@ def simple_upload(request):
     return render(request, 'mgcapp/upload.html')
 
 def extraction_view(request):
+    if request.method == 'POST':
+        data = request.POST
+        action = data.get("type")
+        if action == "recommender":
+            
+            
+            return redirect('recommender')
+        else: 
+            return render(request, 'mgcapp/recommender.html', {
+                    'format_error': "Something went wrong! :)"
+                })
     documents = Document.objects.last()
     extract_and_save(documents.document,documents.name)
     pred, pred_text = get_binned_static()
@@ -45,8 +57,49 @@ def extraction_view(request):
     documents.prediction = pred
     documents.prediction_text = pred_text
     documents.save()
+    
     return render(request, 'mgcapp/prediction.html', {
         'document': documents
     })
     
+
+    
+def recommender_view(request):
+    df_input = pd.read_csv('features_last_song.csv')
+    df_extraction = pd.read_csv('extraction.csv')
+    df_extraction_scaled = df_extraction.drop(columns=['genre'])
+    df_input_scaled = df_input.drop(columns=['start'])
+    df_combined = pd.concat([df_input_scaled, df_extraction_scaled])
+    song = df_input.head(1)
+    song_name_part = song['name_v'][0]
+    temp = song_name_part.split(".")
+    song_name = temp[0]+"."+temp[1]
+    song_part = "."+temp[2]
+    #documents = Document.objects.last()
+    #documents.recommender_text = get_extraction_similarity(df_combined, song_name, song_part)
+    
+    #df_input =
+    #cosine_similarity = get_extraction_similarity(df_combined, name, part)
+    #last_song = df['name_v'][0]
+    # string = "Last Song is : " + df['name_v'][0]
+    # df_db = load_csv("extraction.csv")
+    # new_df= combine df and df_db
+    # cosine similariry(new_df)
+    # drop songs with which starts with name_v
+    # sort df absteigend
+
+    
+    # for entries in df:
+    #     recom = find_similar_songs(df['name_v'][entries], entries)
+    #     biggest_val = recom[0]
+
+    # string += "Similar is: " + biggest_val
+    
+    #documents.recommender = recom
+    #documents.prediction_text = pred_text
+    #documents.recommender_text = recom_text
+    #documents.save()
+    return render(request, 'mgcapp/recommender.html')
+
+
 

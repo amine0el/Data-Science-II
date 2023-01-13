@@ -128,3 +128,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+Data/fma_medium_sortiert
+Web Application/media/documents/Bruce_Springsteen_-_06_-_Empty_Sky.mp3
