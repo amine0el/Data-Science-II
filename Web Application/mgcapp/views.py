@@ -65,7 +65,22 @@ def extraction_view(request):
 
     
 def recommender_view(request):
-    # df = load_csv("../feature_last_song.csv")
+    df_input = pd.read_csv('features_last_song.csv')
+    df_extraction = pd.read_csv('extraction.csv')
+    df_extraction_scaled = df_extraction.drop(columns=['genre'])
+    df_input_scaled = df_input.drop(columns=['start'])
+    df_combined = pd.concat([df_input_scaled, df_extraction_scaled])
+    song = df_input.head(1)
+    song_name_part = song['name_v'][0]
+    temp = song_name_part.split(".")
+    song_name = temp[0]+"."+temp[1]
+    song_part = "."+temp[2]
+    #documents = Document.objects.last()
+    #documents.recommender_text = get_extraction_similarity(df_combined, song_name, song_part)
+    
+    #df_input =
+    #cosine_similarity = get_extraction_similarity(df_combined, name, part)
+    #last_song = df['name_v'][0]
     # string = "Last Song is : " + df['name_v'][0]
     # df_db = load_csv("extraction.csv")
     # new_df= combine df and df_db
@@ -82,6 +97,7 @@ def recommender_view(request):
     
     #documents.recommender = recom
     #documents.prediction_text = pred_text
+    #documents.recommender_text = recom_text
     #documents.save()
     return render(request, 'mgcapp/recommender.html')
 
