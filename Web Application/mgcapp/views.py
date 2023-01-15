@@ -53,19 +53,22 @@ def extraction_view(request):
     documents = Document.objects.last()
     extract_and_save(documents.document,documents.name)
     pred, pred_text = get_binned_static()
+    genre_info = get_genre_info(pred)
     pred_time_series()
     documents.prediction = pred
     documents.prediction_text = pred_text
     documents.save()
     
     return render(request, 'mgcapp/prediction.html', {
-        'document': documents
+        'document': documents,
+        'genre_info': genre_info
     })
     
 
     
 def recommender_view(request):
     string = str(get_extraction_similarity())
+    #string ="TEst"
     #documents = Document.objects.last()
     #documents.recommender_text = get_extraction_similarity(df_combined, song_name, song_part)
     

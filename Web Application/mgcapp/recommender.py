@@ -13,6 +13,7 @@ from MGC.settings import BASE_DIR
 def read_features():
     documents = Document.objects.last()
     df = extract(documents.document, documents.name)
+   
     return df
 
 def extract_one_feature(y,sr):
@@ -122,7 +123,7 @@ def get_extraction_similarity():
    
     # Display the 5 top matches 
     #print("\n*******\nSimilar songs to ", name)
-    #print(series.head(5))
+    print(series.head(5))
     return series.head(5)
 
 # def play_similar_song():

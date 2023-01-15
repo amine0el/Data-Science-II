@@ -6,34 +6,54 @@
 
 {% endblock %}
 {% block content %}
-<div class="container text-center">
-    <div class="row">
-      <div class="col">
-        <img src="media/logo_data_science.png" alt="logo">
-      </div>
-      <div class="col-6">
-        <h1 class="display-4">GOT the beat</h1>
-        <p>Welcome to the genre Classification Demo of "The Smash Group".</p>
-        <p>This project is done during the class Data Science II at the TU Darmstadt.</p>
-        <p>WiSe 2022/2023</p>
-        <h3> Here are the last 10 predicted songs: </h3>
-        <ul>
-          {% for obj in documents %}
-              <div class="col-sm-6 bg-light p-3 rounded-5">
-                <a>Name: &nbsp; {{ obj.name}}</a>
-                <br><a>Prediction: &nbsp;  {{ obj.prediction}}</a>
-              </div>
-              <div class="col-sm-9 bg-light p-3 rounded-5">
-                <audio controls="" name="media"><source src="{{obj.document.url}}" type="audio/x-wav" autostart="false"></audio>
-              </div>
-              <br>
-          {% endfor %}
-        </ul>
-      </div>
-      <div class="col">
-      </div>
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <img src="media/logo_data_science.png" alt="logo">
+    </div>
+    <div class="col-6 text-center">
+
+      <h1 class="display-4">GOT the beat</h1>
+      <br>
+      <p>Welcome to the genre Classification Demo of "The Smash Group".</p>
+      <p>This project is done during the class Data Science II at the TU Darmstadt.</p>
+      <p>WiSe 2022/2023</p>
+      <br>
+      <h3> Here are the last predicted songs: </h3><br>
+
+
+
+
+
+
+
+
+
+      <ul>
+
+
+        {% for obj in documents %}
+
+        <div class="col-sm-9 text-sm-left bg-light p-3 rounded-5" align="left">
+          <b>&nbsp;Songname: &nbsp;</b>{{ obj.name}}<br>
+          <b>&nbsp;Prediction: &nbsp;</b>{{ obj.prediction}}
+        </div>
+
+        <div class="col-sm-12 bg-light p-3 rounded-5" align="left">
+          <audio controls="" name="media" style="width: 550px">
+            <source src="{{obj.document.url}}" type="audio/x-wav" autostart="false">
+          </audio>
+        </div>
+        <br>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="col">
     </div>
   </div>
+</div>
+
 
 
 {% endblock %}
