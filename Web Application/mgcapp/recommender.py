@@ -97,7 +97,7 @@ def get_extraction_similarity():
     df_extraction = pd.read_csv(file, index_col='name')
     # Drop labels from original dataframe
     data = data.drop(columns=['filedir'])
-    df_extraction = df_extraction.drop(columns=['Unnamed: 0','name_v','filedir','genre','length'])
+    df_extraction = df_extraction.drop(columns=['Unnamed: 0','name_v','filedir','genre','length', 'filename'])
 
     df_combined = pd.concat([data, df_extraction])
     names = df_combined[['tempo']]
