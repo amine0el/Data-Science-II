@@ -14,6 +14,7 @@
     <div class="col-6">
       <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
+        {% if not uploaded_file_url %}
         <div class="mb-3" align="center">
           <label for="formFile" class="form-label">Input your file</label>
           <input class="form-control" type="file" id="formFile" name="myfile">
@@ -21,6 +22,7 @@
         <div class="mb-3" align="center">
           <button type="submit" class="btn btn-primary" name="type" value="file">Upload</button>
         </div>
+        {% endif %}
 
         {% if uploaded_file_url %}
         <p><b>File uploaded! ATTENTION: Prediction takes some time! </b></p>
