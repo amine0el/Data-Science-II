@@ -12,8 +12,12 @@ from MGC.settings import BASE_DIR
 
 def read_features():
     documents = Document.objects.last()
+<<<<<<< Updated upstream
     df = extract(documents.document, documents.name)
    
+=======
+    df = extract(documents.document.path, documents.name)
+>>>>>>> Stashed changes
     return df
 
 def extract_one_feature(y,sr):
@@ -93,11 +97,11 @@ def get_extraction_similarity():
     # Read data
     data = read_features()
     data = data.set_index('name')
-    file = str(BASE_DIR) + '/mgcapp/extraction.csv'
-    df_extraction = pd.read_csv(file, index_col='name')
+    file = str(BASE_DIR) + '/mgcapp/features_30_sec.csv'
+    df_extraction = pd.read_csv(file, index_col='filename')
     # Drop labels from original dataframe
     data = data.drop(columns=['filedir'])
-    df_extraction = df_extraction.drop(columns=['Unnamed: 0','name_v','filedir','genre','length'])
+    df_extraction = df_extraction.drop(columns=['length','label'])
 
     df_combined = pd.concat([data, df_extraction])
     names = df_combined[['tempo']]

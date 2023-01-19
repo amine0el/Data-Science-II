@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-@13ng6l^k&@v1-)7=29nvbk89=xywt5s)#he6(*!iz(5y6^t7n'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost" ]
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost').split(',')
 
 
 # Application definition
@@ -44,6 +44,8 @@ INSTALLED_APPS = [
 
     #dependencies app
     'bootstrap5',
+    'celery',
+    'django_celery_beat'
 ]
 
 MIDDLEWARE = [
@@ -82,8 +84,12 @@ WSGI_APPLICATION = 'MGC.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': os.environ.get('SQL_ENGINE', 'django.db.backends.sqlite3'),
+        'NAME': os.environ.get('SQL_DATABASE', os.path.join(BASE_DIR, 'db.sqlite3')),
+        'USER': os.environ.get('SQL_USER', 'user'),
+        'PASSWORD': os.environ.get('SQL_PASSWORD', 'password'),
+        'HOST': os.environ.get('SQL_HOST', 'localhost'),
+        'PORT': os.environ.get('SQL_PORT', '5432'),
     }
 }
 
@@ -135,3 +141,15 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Redis Celery settings
+
+REDIS_SERVER = os.environ.get('REDIS_SERVER', 'localhost')
+
+CELERY_BROKER_URL = 'redis://' + REDIS_SERVER + ':6379/0'
+CELERY_RESULT_BACKEND = 'redis://' + REDIS_SERVER + ':6379/0'
+CELERY_TIMEZONE = 'Europe/Berlin'
+
+
+CSRF_TRUSTED_ORIGINS=['http://localhost:8006']

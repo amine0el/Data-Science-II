@@ -10,12 +10,20 @@ import numpy as np
 import librosa
 import warnings
 warnings.filterwarnings('ignore')
+<<<<<<< Updated upstream
 
 
 # GLobal Info Text:
 genres_info = {"blues": "Blues_Info", "classical": "Classical_Info", "country": "Country music is known for its ballads and dance tunes with simple form, folk lyrics, and harmonies accompanied by string instruments such as electric and acoustic guitars, steel guitars (such as pedal steels and dobros), banjos, fiddles, and harmonicas. Though it is primarily rooted in various forms of American folk music, such as old-time music and Appalachian music, many other traditions, including African-American, Mexican, Irish, and Hawaiian music, have also had a formative influence on the genre.[8] Blues modes have been used extensively throughout its recorded history.", "disco": "Disco_Info",
                "hiphop": "Hiphop_Info", "jazz": "Jazz_Info", "metal": "Metal_Info", "pop": "Pop_Info", "reggae": "Reggae_Info", "rock": "Rock_Info"}
 
+=======
+import matplotlib
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+matplotlib.use('agg')
+import xgboost
+>>>>>>> Stashed changes
 
 def get_genre_dict():
     genres = ["blues", "classical", "country", "disco",
@@ -125,7 +133,7 @@ def extract_and_save(filedir, filename):
 
 def predict_last(features_csv):
     xgb = xgboost.XGBClassifier()
-    xgb.load_model("../Trained_Models/xgb_model.txt")
+    xgb.load_model("./Trained_Models/xgb_model.txt")
     df = pd.read_csv(features_csv)
     name = df['name']
     data = df.iloc[0:, 5:]
