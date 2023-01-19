@@ -6,32 +6,67 @@
 
 {% endblock %}
 {% block content %}
-<div class="container text-center">
-    <div class="row">
-      <div class="col">
-        <img src="media/logo_data_science.png" alt="logo" width = "200">
-      </div>
-      <div class="col-9">
-        <h1 class="display-4">GOT the beat</h1>
-        
-        <ul>
-          <p>Test Recommender</p>
-          {% if recommendation %}
-              
-            
-          
-        </ul>
-        <p>
-          <pre><b>{{ recommendation }}</b></pre>
-          </p>
+<div class="container text-left">
+  <div class="row">
+    <div class="col">
+      <img src="media/logo_data_science.png" alt="logo" width="300">
+    </div>
+    <div class="col-9">
+      <h1 class="display-4 "> &nbsp; GOT the beat</h1>
 
+      <ul>
+        {% if document %}
+        <div class="col-sm-9 bg-light p-3 rounded-5">
+          <b>Songname: &nbsp;</b>{{ document.name}}<br>
+          <b>Prediction: &nbsp;</b>{{ document.prediction}}
+        </div>
+        <div class="col-sm-9 bg-light p-3 rounded-5">
+          <audio controls="" name="media" style="width: 600px">
+            <source src="{{document.document.url}}" type="audio/x-wav" autostart="false">
+          </audio>
+        </div>
         {% endif %}
-      </div>
 
-      <div class="col">
-      </div>
+      </ul>
     </div>
   </div>
+</div>
+<div class="container text-center">
+  <div class="row">
+
+    {% if not discommender %}
+    <p>Not the right music for you? Click on the button to get totally different music: </p>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="mb-3" align="center">
+        <button type="submit" class="btn btn-primary" name="type" value="get-worst">Get least similar Song's</button>
+      </div>
+      {% endif %}
+
+      <p>
+      <pre><b>{{ recommendation_text }}</b></pre>
+      </p>
+      <pre>
+    {% for names,files in songfiles %}
+    
+    <b>{{ names }}</b>
+  
+    <audio controls="" name="media" style="width: 400px">
+      <source src="{{files}}" type="audio/x-wav" autostart="false">
+    </audio>
+    {% endfor %}
+  </pre>
+
+
+
+
+
+  </div>
+
+  <div class="col">
+  </div>
+</div>
+</div>
 
 
 {% endblock %}

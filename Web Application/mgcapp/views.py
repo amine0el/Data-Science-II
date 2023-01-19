@@ -9,7 +9,7 @@ from mgcapp.prediction import *
 from mgcapp.recommender import *
 
 def home(request):
-    documents = Document.objects.order_by('-uploaded_at').all()
+    documents = Document.objects.order_by('-uploaded_at').all()[:10]
     
     return render(request, 'mgcapp/home.html', { 'documents': documents })
 
@@ -53,45 +53,77 @@ def extraction_view(request):
     documents = Document.objects.last()
     extract_and_save(documents.document,documents.name)
     pred, pred_text = get_binned_static()
+    genre_info = get_genre_info(pred)
     pred_time_series()
     documents.prediction = pred
     documents.prediction_text = pred_text
     documents.save()
     
     return render(request, 'mgcapp/prediction.html', {
-        'document': documents
+        'document': documents,
+        'genre_info': genre_info
     })
     
 
     
-def recommender_view(request):
-    string = str(get_extraction_similarity())
-    #documents = Document.objects.last()
-    #documents.recommender_text = get_extraction_similarity(df_combined, song_name, song_part)
-    
-    #df_input =
-    #cosine_similarity = get_extraction_similarity(df_combined, name, part)
-    #last_song = df['name_v'][0]
-    # string = "Last Song is : " + df['name_v'][0]
-    # df_db = load_csv("extraction.csv")
-    # new_df= combine df and df_db
-    # cosine similariry(new_df)
-    # drop songs with which starts with name_v
-    # sort df absteigend
+def recommender_view_worst(request):
+    recom_series = get_extraction_similarity("worst")
+    documents = Document.objects.last()
+    print(documents.document.url)
+    path = '/media/genres_original/'
 
-    
-    # for entries in df:
-    #     recom = find_similar_songs(df['name_v'][entries], entries)
-    #     biggest_val = recom[0]
-
-    # string += "Similar is: " + biggest_val
-    
-    #documents.recommender = recom
-    #documents.prediction_text = pred_text
-    #documents.recommender_text = recom_text
-    #documents.save()
+    output = "Take a look at these songs, they are completely different!\n\n"
+    output += "Songname \t\t\t\t Similarity\n"
+    songfiles =[]
+   
+    for i in range(len(recom_series)):
+        song_data=[]
+        song_data.append(str(recom_series.keys()[i]) + " \t\t\t\t " + str(round(recom_series[i]*100,1)) +"% \n")
+        genre = recom_series.keys()[i][:-6]
+        song_data.append(path + str(genre) + "/" + str(recom_series.keys()[i]) + ".wav")
+        songfiles.append(song_data)
+        
     return render(request, 'mgcapp/recommender.html', {
-        'recommendation' : string
+        'recommendation_text' : output,
+        'songfiles': songfiles,
+        'document': documents,
+        'media_path': path,
+        'discommender': True
+    })
+
+def recommender_view(request):
+    if request.method == 'POST':
+        data = request.POST
+        action = data.get("type")
+        if action == "get-worst":
+            
+            
+            return redirect('recommender-worst')
+        else: 
+            return render(request, 'mgcapp/recommender.html', {
+                    'format_error': "Something went wrong! :)"
+                })
+    recom_series = get_extraction_similarity("best")
+    documents = Document.objects.last()
+    print(documents.document.url)
+    path = '/media/genres_original/'
+
+    output = "Here are five similiar songs to the Song \"" + str(documents.name) + "\" :\n\n"
+    output += "Songname \t\t\t\t Similarity\n"
+    songfiles =[]
+   
+    for i in range(len(recom_series)):
+        song_data=[]
+        song_data.append(str(recom_series.keys()[i]) + " \t\t\t\t " + str(round(recom_series[i]*100,1)) +"% \n")
+        genre = recom_series.keys()[i][:-6]
+        song_data.append(path + str(genre) + "/" + str(recom_series.keys()[i]) + ".wav")
+        songfiles.append(song_data)
+        
+    return render(request, 'mgcapp/recommender.html', {
+        'recommendation_text' : output,
+        'songfiles': songfiles,
+        'document': documents,
+        'media_path': path
     })
 
 
