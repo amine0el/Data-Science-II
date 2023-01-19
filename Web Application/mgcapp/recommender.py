@@ -12,13 +12,8 @@ from MGC.settings import BASE_DIR
 
 def read_features():
     documents = Document.objects.last()
-<<<<<<< HEAD
     df = extract(documents.document.path, documents.name)
    
-=======
-    df = extract(documents.document, documents.name)
-
->>>>>>> origin/main
     return df
 
 

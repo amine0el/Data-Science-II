@@ -18,12 +18,14 @@ services:
         - sqlport=5432
  #   network_mode: bridge
     entrypoint: /bin/bash
-    command: -c "python manage.py migrate --noinput && gunicorn --bind 0.0.0.0:8000 MGC.wsgi --timeout 600"
+    cpus: 6
+    command: -c "python manage.py migrate --noinput && gunicorn --bind 0.0.0.0:8000 --workers 6 MGC.wsgi --timeout 600"
     environment:
         - ALLOWED_HOSTS=localhost
     expose:
       - 8000
     volumes:
+      - media:/app/media 
       - tmp_data:/tmp
       - static_volume:/app/static_collected
   celery:

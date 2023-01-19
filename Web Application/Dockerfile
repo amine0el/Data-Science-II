@@ -61,4 +61,4 @@ RUN python manage.py collectstatic --noinput
 
 
 # During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "MGC.wsgi", "--timeout 600"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "6", "MGC.wsgi", "--timeout 600"]
