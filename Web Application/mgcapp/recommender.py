@@ -12,12 +12,8 @@ from MGC.settings import BASE_DIR
 
 def read_features():
     documents = Document.objects.last()
-<<<<<<< Updated upstream
-    df = extract(documents.document, documents.name)
-   
-=======
     df = extract(documents.document.path, documents.name)
->>>>>>> Stashed changes
+   
     return df
 
 def extract_one_feature(y,sr):
