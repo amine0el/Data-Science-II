@@ -99,7 +99,6 @@ def extract(filedir, name):
 
 def get_extraction_similarity(type):
     # Read data
-<<<<<<< HEAD
     data = read_features()
     data = data.set_index('name')
     file = str(BASE_DIR) + '/mgcapp/features_30_sec.csv'
@@ -107,24 +106,6 @@ def get_extraction_similarity(type):
     # Drop labels from original dataframe
     data = data.drop(columns=['filedir'])
     df_extraction = df_extraction.drop(columns=['length','label'])
-=======
-    path = str(BASE_DIR) + '/mgcapp/'
-    if type == "best":
-        data = read_features()
-        data.to_csv(path + "features_last_full_song.csv")
-        data = data.set_index('name')
-        data = data.drop(columns=['filedir'])
-    else:
-        data = pd.read_csv(path + "features_last_full_song.csv", index_col='name')
-        data = data.drop(columns=['filedir', 'Unnamed: 0'])
-    
-    
-    df_extraction = pd.read_csv(path +'extraction.csv', index_col='name')
-    # Drop labels from original dataframe
-    
-    df_extraction = df_extraction.drop(
-        columns=['Unnamed: 0', 'name_v', 'filedir', 'genre', 'length'])
->>>>>>> origin/main
 
     df_combined = pd.concat([data, df_extraction])
     names = df_combined[['tempo']]
