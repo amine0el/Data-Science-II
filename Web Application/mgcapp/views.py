@@ -70,7 +70,7 @@ def recommender_view_worst(request):
     recom_series = get_extraction_similarity("worst")
     documents = Document.objects.last()
     print(documents.document.url)
-    path = '/media/genres_original/'
+    path = path = '/media/fma_medium_unsortiert/'
 
     output = "Take a look at these songs, they are completely different!\n\n"
     output += "Songname \t\t\t\t Similarity\n"
