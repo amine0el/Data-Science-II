@@ -105,7 +105,7 @@ def recommender_view(request):
     recom_series = get_extraction_similarity("best")
     documents = Document.objects.last()
     print(documents.document.url)
-    path = '/media/genres_original/'
+    path = '/media/fma_medium_unsortiert/'
 
     output = "Here are five similiar songs to the Song \"" + str(documents.name) + "\" :\n\n"
     output += "Songname \t\t\t\t Similarity\n"
