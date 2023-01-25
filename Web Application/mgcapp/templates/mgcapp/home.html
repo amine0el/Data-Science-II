@@ -44,6 +44,11 @@
             <source src="{{obj.document.url}}" type="audio/x-wav" autostart="false">
           </audio>
         </div>
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="mb-3" align="center">
+            <button type="submit" class="btn btn-primary" name="type" value={{obj.name}}>Get Prediction</button>
+          </div>
         <br>
         {% endfor %}
       </ul>
