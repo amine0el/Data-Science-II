@@ -13,7 +13,6 @@ from MGC.settings import BASE_DIR
 def read_features():
     documents = Document.objects.last()
     df = extract(documents.document.path, documents.name)
-   
     return df
 
 
@@ -94,13 +93,22 @@ def extract(filedir, name):
 
 def get_extraction_similarity(type):
     # Read data
-    data = read_features()
-    data = data.set_index('name')
-    file = str(BASE_DIR) + '/mgcapp/features_30_sec.csv'
-    df_extraction = pd.read_csv(file, index_col='filename')
+    path = str(BASE_DIR) + '/mgcapp/'
+    if type == "best":
+        data = read_features()
+        data.to_csv(path + "features_last_full_song.csv")
+        data = data.set_index('name')
+        data = data.drop(columns=['filedir'])
+    else:
+        data = pd.read_csv(path + "features_last_full_song.csv", index_col='name')
+        data = data.drop(columns=['filedir', 'Unnamed: 0'])
+    
+    
+    df_extraction = pd.read_csv(path +'extraction_fma_full.csv', index_col=['name', 'filename'])
     # Drop labels from original dataframe
-    data = data.drop(columns=['filedir'])
-    df_extraction = df_extraction.drop(columns=['length','label'])
+    #print(df_extraction.index.get_level_values(level=0))
+    df_extraction = df_extraction.drop(
+        columns=['Unnamed: 0', 'filedir', 'genre', 'length'])
 
     df_combined = pd.concat([data, df_extraction])
     names = df_combined[['tempo']]

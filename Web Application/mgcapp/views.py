@@ -70,17 +70,16 @@ def recommender_view_worst(request):
     recom_series = get_extraction_similarity("worst")
     documents = Document.objects.last()
     print(documents.document.url)
-    path = '/media/genres_original/'
+    path = path = '/media/fma_medium_unsortiert/'
 
     output = "Take a look at these songs, they are completely different!\n\n"
     output += "Songname \t\t\t\t Similarity\n"
     songfiles =[]
-   
+    
     for i in range(len(recom_series)):
         song_data=[]
-        song_data.append(str(recom_series.keys()[i]) + " \t\t\t\t " + str(round(recom_series[i]*100,1)) +"% \n")
-        genre = recom_series.keys()[i][:-6]
-        song_data.append(path + str(genre) + "/" + str(recom_series.keys()[i]) + ".wav")
+        song_data.append(str(recom_series.keys()[i][0]) + " \t\t\t\t " + str(round(recom_series[i]*100,1)) +"% \n")
+        song_data.append(path + str(recom_series.keys()[i][1]) + ".mp3")
         songfiles.append(song_data)
         
     return render(request, 'mgcapp/recommender.html', {
@@ -106,7 +105,7 @@ def recommender_view(request):
     recom_series = get_extraction_similarity("best")
     documents = Document.objects.last()
     print(documents.document.url)
-    path = '/media/genres_original/'
+    path = '/media/fma_medium_unsortiert/'
 
     output = "Here are five similiar songs to the Song \"" + str(documents.name) + "\" :\n\n"
     output += "Songname \t\t\t\t Similarity\n"
@@ -114,9 +113,8 @@ def recommender_view(request):
    
     for i in range(len(recom_series)):
         song_data=[]
-        song_data.append(str(recom_series.keys()[i]) + " \t\t\t\t " + str(round(recom_series[i]*100,1)) +"% \n")
-        genre = recom_series.keys()[i][:-6]
-        song_data.append(path + str(genre) + "/" + str(recom_series.keys()[i]) + ".wav")
+        song_data.append(str(recom_series.keys()[i][0]) + " \t\t\t\t " + str(round(recom_series[i]*100,1)) +"% \n")
+        song_data.append(path + str(recom_series.keys()[i][1]) + ".mp3")
         songfiles.append(song_data)
         
     return render(request, 'mgcapp/recommender.html', {
