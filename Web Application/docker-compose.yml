@@ -3,7 +3,7 @@ version: '3.4'
 services:
   MGC:
     restart: always
-    image: webapp
+    image: mgc
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -25,7 +25,7 @@ services:
     expose:
       - 8000
     volumes:
-      - media:/app/media 
+      - media:/app/media
       - tmp_data:/tmp
       - static_volume:/app/static_collected
   celery:
