@@ -51,7 +51,7 @@ def extraction_view(request):
                     'format_error': "Something went wrong! :)"
                 })
     documents = Document.objects.last()
-    extract_and_save(documents.document,documents.name)
+    extract_and_save(documents.document.path,documents.name)
     pred, pred_text = get_binned_static()
     genre_info = get_genre_info(pred)
     pred_time_series()

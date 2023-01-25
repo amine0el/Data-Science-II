@@ -1,7 +1,7 @@
 # Import Libraries:
 import xgboost
 import matplotlib
-matplotlib.use('TkAgg')
+matplotlib.use('agg')
 from matplotlib import dates as mdates
 from matplotlib import pyplot as plt
 
