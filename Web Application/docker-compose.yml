@@ -18,8 +18,7 @@ services:
         - sqlport=5432
  #   network_mode: bridge
     entrypoint: /bin/bash
-    cpus: 6
-    command: -c "python manage.py migrate --noinput && gunicorn --bind 0.0.0.0:8000 --workers 6 MGC.wsgi --timeout 600"
+    command: -c "python manage.py migrate --noinput && gunicorn --bind 0.0.0.0:8000 MGC.wsgi --timeout 600"
     environment:
         - ALLOWED_HOSTS=localhost
     expose:
@@ -34,7 +33,7 @@ services:
       context: .
       dockerfile: ./Dockerfile
       args:
-        - djangodebug=False
+        - djangodebug=true
         - redisserver=redis
         - sqlengine=django.db.backends.postgresql
         - sqldatabase=MGC
@@ -45,13 +44,14 @@ services:
     command: ["celery", "-A", "MGC", "worker", "-l", "info"]
     volumes:
       - tmp_data:/tmp
+      - media:/app/media
   celery-beat:
     image: mgc
     build:
       context: .
       dockerfile: ./Dockerfile
       args:
-        - djangodebug=False
+        - djangodebug=true
         - redisserver=redis
         - sqlengine=django.db.backends.postgresql
         - sqldatabase=MGC
@@ -62,6 +62,7 @@ services:
     command: ["celery", "-A", "MGC", "beat", "-l", "info", "--scheduler",  "django_celery_beat.schedulers:DatabaseScheduler"]
     volumes:
       - tmp_data:/tmp
+      - media:/app/media
   redis:
     image: redis:latest
     container_name: redis_mgc

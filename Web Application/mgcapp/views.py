@@ -7,6 +7,7 @@ from django.core.files.storage import FileSystemStorage
 
 from mgcapp.prediction import *
 from mgcapp.recommender import *
+from mgcapp.tasks import go_to_sleep
 
 def home(request):
     documents = Document.objects.order_by('-uploaded_at').all()[:10]
@@ -126,3 +127,10 @@ def recommender_view(request):
 
 
 
+
+
+
+def index(request):
+    task = go_to_sleep.delay(1)
+    
+    return render(request, 'mgcapp/index.html', {'task_id' : task.task_id})

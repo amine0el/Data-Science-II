@@ -45,7 +45,9 @@ INSTALLED_APPS = [
     #dependencies app
     'bootstrap5',
     'celery',
-    'django_celery_beat'
+    'django_celery_beat',
+    'django_celery_results',
+    'celery_progress',
 ]
 
 MIDDLEWARE = [
