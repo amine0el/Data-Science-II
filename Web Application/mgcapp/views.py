@@ -25,7 +25,7 @@ def simple_upload(request):
             return redirect('prediction')
         elif action == "file" and 'myfile' in request.FILES:
             myfile = request.FILES['myfile']
-            if (".mp3" or ".wav") in myfile.name:
+            if (".mp3" in myfile.name) or (".wav" in myfile.name):
                 qs = Document(name=myfile.name,document=myfile)
                 qs.save()
                 return render(request, 'mgcapp/upload.html',{
