@@ -7,6 +7,7 @@ class Document(models.Model):
     document = models.FileField(upload_to='documents/')
     uploaded_at = models.DateTimeField(auto_now_add=True)
     prediction_text = models.TextField(verbose_name='Prediction')
+    timeSeries = models.ImageField(upload_to='pictures/')
     prediction = models.CharField(max_length=255, blank=True)
     recommender = models.CharField(max_length=255, blank=True)
         
