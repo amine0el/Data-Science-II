@@ -11,11 +11,12 @@ from mgcapp.recommender import *
 def home(request):
     if request.method == 'POST':
         data = request.POST
+        print(data)
         action = data.get("type")
         if action != "":
             print(action)
             documents = Document.objects.filter(name__icontains=action)
-            #documents = documents[0]
+            documents = documents[0]
             print(documents)
             genre_info = get_genre_info(documents.prediction)
             return render(request, 'mgcapp/prediction.html', {

@@ -47,7 +47,7 @@
         <form method="post" enctype="multipart/form-data">
           {% csrf_token %}
           <div class="mb-3" align="center">
-            <button type="submit" class="btn btn-primary" name="type" value={{obj.name}}>Get Prediction</button>
+            <button type="submit" class="btn btn-primary" name="type" value="{{obj.name}}">Get Prediction</button>
           </div>
         <br>
         {% endfor %}
