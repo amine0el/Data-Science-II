@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 
     #dependencies app
     'bootstrap5',
+    'django_bootstrap_icons',
 ]
 
 MIDDLEWARE = [

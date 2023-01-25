@@ -2,6 +2,7 @@
 
 {% load static %}
 {% load bootstrap5 %}
+{% load bootstrap_icons %}
 {% block title %}
 
 {% endblock %}
@@ -33,22 +34,24 @@
 
 
         {% for obj in documents %}
-
-        <div class="col-sm-9 text-sm-left bg-light p-3 rounded-5" align="left">
-          <b>&nbsp;Songname: &nbsp;</b>{{ obj.name}}<br>
-          <b>&nbsp;Prediction: &nbsp;</b>{{ obj.prediction}}
+        <div class="row align-items-start">
+          <div class="col-sm-9 text-sm-left bg-light p-3 rounded-5" align="left">
+            <b>&nbsp;Songname: &nbsp;</b>{{ obj.name}}<br>
+            <b>&nbsp;Prediction: &nbsp;</b>{{ obj.prediction}}
+          </div>
+          <div class="col-sm-3 text-sm-left bg-light p-3 rounded-5" align="center">
+            <form method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-default" aria-label="Left Align" name="document" value="{{obj.name}}">
+                {% bs_icon 'box-arrow-up-right'%}
+              </button>
+          </div>
         </div>
-
         <div class="col-sm-12 bg-light p-3 rounded-5" align="left">
           <audio controls="" name="media" style="width: 550px">
             <source src="{{obj.document.url}}" type="audio/x-wav" autostart="false">
           </audio>
         </div>
-        <form method="post" enctype="multipart/form-data">
-          {% csrf_token %}
-          <div class="mb-3" align="center">
-            <button type="submit" class="btn btn-primary" name="document" value="{{obj.name}}">Get Prediction</button>
-          </div>
         <br>
         {% endfor %}
       </ul>
