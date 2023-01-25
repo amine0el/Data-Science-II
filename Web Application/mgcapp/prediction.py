@@ -4,7 +4,7 @@ import matplotlib
 matplotlib.use('agg')
 from matplotlib import dates as mdates
 from matplotlib import pyplot as plt
-
+from mutagen.easyid3 import EasyID3
 import pandas as pd
 import numpy as np
 import librosa
@@ -42,10 +42,13 @@ def extract_extern(filedir, filename):
     i = 0
     csv = []
     length = 0
-    length_audio = librosa.get_duration(filename=filedir)
-    offset = length_audio/4
-    end = length_audio*3/4
-
+    if(".mp3" in filename):
+        audio = EasyID3(filedir)
+        audio.delete()
+        audio.save()
+    length_audio = int(librosa.get_duration(filename=filedir))
+    offset = int(length_audio/4)
+    end = int(length_audio*3/4)
     while (go):
         y, sr = librosa.load(filedir, offset=offset, duration=duration)
         if (length != len(y) and length != 0) or (offset + duration) >= end:
