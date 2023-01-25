@@ -6,6 +6,7 @@ argon2-cffi==21.3.0
 argon2-cffi-bindings==21.2.0
 asgiref==3.5.2
 asttokens==2.1.0
+async-timeout==4.0.2
 attrs==22.1.0
 audioread==3.0.0
 backcall==0.2.0
@@ -58,6 +59,7 @@ MarkupSafe==2.1.1
 matplotlib==3.6.2
 matplotlib-inline==0.1.6
 mistune==2.0.4
+mutagen==1.46.0
 nbclassic==0.4.8
 nbclient==0.7.0
 nbconvert==7.2.5
@@ -79,11 +81,13 @@ pooch==1.6.0
 prometheus-client==0.15.0
 prompt-toolkit==3.0.32
 psutil==5.9.3
+psycopg2-binary==2.9.5
 ptyprocess==0.7.0
 pure-eval==0.2.2
 pycparser==2.21
 pydub==0.25.1
 Pygments==2.13.0
+PyGreSQL==5.2.4
 pyparsing==3.0.9
 pyrsistent==0.19.2
 python-crontab==2.7.1
@@ -91,6 +95,7 @@ python-dateutil==2.8.2
 pytz==2022.6
 PyWavelets==1.4.1
 pyzmq==24.0.1
+redis==4.4.2
 requests==2.28.1
 resampy==0.4.2
 scikit-image==0.19.3
