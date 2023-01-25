@@ -3,6 +3,7 @@ from mgcapp.models import Document
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.conf import settings
+from django.core.files.images import ImageFile
 from django.core.files.storage import FileSystemStorage
 
 from mgcapp.prediction import *
@@ -10,9 +11,28 @@ from mgcapp.recommender import *
 from mgcapp.tasks import go_to_sleep
 
 def home(request):
-    documents = Document.objects.order_by('-uploaded_at').all()[:10]
-    
-    return render(request, 'mgcapp/home.html', { 'documents': documents })
+    if request.method == 'POST':
+        data = request.POST
+        if "document" in data:
+            action = data.get("document")
+            if action != "":
+                documents = Document.objects.filter(name__icontains=action)
+                documents = documents[0]
+                if documents.prediction == "":
+                    documents, genre_info=repredict(documents)
+                    return render(request, 'mgcapp/prediction.html', {
+                    'document': documents,
+                    'genre_info': genre_info})      
+                else:
+                    genre_info = get_genre_info(documents.prediction)
+                    return render(request, 'mgcapp/prediction.html', {
+                        'document': documents,
+                        'genre_info': genre_info})
+        else:
+            return redirect("home")
+    else:
+        documents = Document.objects.order_by('-uploaded_at').all()[:10]
+        return render(request, 'mgcapp/home.html', { 'documents': documents })
 
 
 def simple_upload(request):
@@ -52,10 +72,21 @@ def extraction_view(request):
                     'format_error': "Something went wrong! :)"
                 })
     documents = Document.objects.last()
-    extract_and_save(documents.document.path,documents.name)
+    try:
+        extract_and_save(documents.document.path,documents.name)
+    except:
+        print("Error")
+        return render(request, 'mgcapp/recommender.html', {
+                    'format_error': "File is not readable! :)"
+                })
     pred, pred_text = get_binned_static()
     genre_info = get_genre_info(pred)
     pred_time_series()
+    with open('media/last_time_series.png', 'rb') as existing_file:
+        django_image_file = ImageFile(file=existing_file, name='last_time_series.png')
+        documents.timeSeries = django_image_file
+        documents.save()
+    documents = Document.objects.last()
     documents.prediction = pred
     documents.prediction_text = pred_text
     documents.save()
@@ -65,7 +96,23 @@ def extraction_view(request):
         'genre_info': genre_info
     })
     
+def repredict(documents):
+   
+    extract_and_save(documents.document.path,documents.name)
+   
+    pred, pred_text = get_binned_static()
+    genre_info = get_genre_info(pred)
+    pred_time_series()
+    with open('media/last_time_series.png', 'rb') as existing_file:
+        django_image_file = ImageFile(file=existing_file, name='last_time_series.png')
+        documents.timeSeries = django_image_file
+        documents.save()
+    documents.prediction = pred
+    documents.prediction_text = pred_text
+    documents.save()
+    return documents, genre_info
 
+    
     
 def recommender_view_worst(request):
     recom_series = get_extraction_similarity("worst")

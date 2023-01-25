@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'django_celery_results',
     'celery_progress',
+    'django_bootstrap_icons',
 ]
 
 MIDDLEWARE = [

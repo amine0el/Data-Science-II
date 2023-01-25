@@ -8,11 +8,19 @@ import os
 import librosa
 from mgcapp.models import Document
 from MGC.settings import BASE_DIR
-
+from mutagen.easyid3 import EasyID3
 
 def read_features():
     documents = Document.objects.last()
-    df = extract(documents.document.path, documents.name)
+    if(".mp3" in documents.name):
+        audio = EasyID3(documents.document.path)
+        audio.delete()
+        audio.save()
+   
+    length = librosa.get_duration(filename=documents.document.path)
+    df = extract(documents.document.path, documents.name, length)
+   
+
     return df
 
 
@@ -81,8 +89,8 @@ def extract_one_feature(y, sr):
     return mdict
 
 
-def extract(filedir, name):
-    y, sr = librosa.load(filedir)
+def extract(filedir, name, length):
+    y, sr = librosa.load(filedir, duration=length-1)
     mdict_ = extract_one_feature(y, sr)
     mdict = {}
     mdict["filedir"] = filedir

@@ -2,6 +2,7 @@
 
 {% load static %}
 {% load bootstrap5 %}
+{% load bootstrap_icons %}
 {% block title %}
 
 {% endblock %}
@@ -13,7 +14,8 @@
     </div>
     <div class="col-6 text-center">
 
-      <h1 class="display-4">GOT the beat</h1>
+      <h1 class="display-4"> <b>GenRec</b></h1>
+      <h2>Music Genre Classifier and Recommender</h2>
       <br>
       <p>Welcome to the genre Classification Demo of "The Smash Group".</p>
       <p>This project is done during the class Data Science II at the TU Darmstadt.</p>
@@ -33,12 +35,19 @@
 
 
         {% for obj in documents %}
-
-        <div class="col-sm-9 text-sm-left bg-light p-3 rounded-5" align="left">
-          <b>&nbsp;Songname: &nbsp;</b>{{ obj.name}}<br>
-          <b>&nbsp;Prediction: &nbsp;</b>{{ obj.prediction}}
+        <div class="row align-items-start">
+          <div class="col-sm-9 text-sm-left bg-light p-3 rounded-5" align="left">
+            <b>&nbsp;Songname: &nbsp;</b>{{ obj.name}}<br>
+            <b>&nbsp;Prediction: &nbsp;</b>{{ obj.prediction}}
+          </div>
+          <div class="col-sm-3 text-sm-left bg-light p-3 rounded-5" align="center">
+            <form method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-default" aria-label="Left Align" name="document" value="{{obj.name}}">
+                {% bs_icon 'box-arrow-up-right'%}
+              </button>
+          </div>
         </div>
-
         <div class="col-sm-12 bg-light p-3 rounded-5" align="left">
           <audio controls="" name="media" style="width: 550px">
             <source src="{{obj.document.url}}" type="audio/x-wav" autostart="false">
