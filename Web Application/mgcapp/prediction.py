@@ -1,14 +1,14 @@
 # Import Libraries:
+import warnings
+import librosa
+import numpy as np
+import pandas as pd
+from mutagen.easyid3 import EasyID3
+from matplotlib import pyplot as plt
+from matplotlib import dates as mdates
 import xgboost
 import matplotlib
 matplotlib.use('agg')
-from matplotlib import dates as mdates
-from matplotlib import pyplot as plt
-from mutagen.easyid3 import EasyID3
-import pandas as pd
-import numpy as np
-import librosa
-import warnings
 warnings.filterwarnings('ignore')
 
 
@@ -42,7 +42,7 @@ def extract_extern(filedir, filename):
     i = 0
     csv = []
     length = 0
-    if(".mp3" in filename):
+    if (".mp3" in filename):
         audio = EasyID3(filedir)
         audio.delete()
         audio.save()
@@ -178,8 +178,8 @@ def pred_time_series():
     ax.scatter(time, prediction_label, linewidth=2.0)
     plt.xlabel("Time [min]")
     plt.savefig("media/last_time_series.png")
-    #plt.close('all')
-   
+    # plt.close('all')
+
 
 # Show the Probabilities of every prediction (two main classes):
 
@@ -257,6 +257,17 @@ def get_binned_static():
     preds, proba, name = predict_last("features_last_song.csv")
     my_dict = get_genre_dict()
     average_proba = []
+    percentage = 0.50
+    i = 1
+    list = []
+    while i < len(preds):
+        if proba[i][proba[i].argmax()] < percentage:
+            list.append(i)
+        i += 1
+# Delete the elements and resize the list
+    proba = np.delete(proba, list, axis=0)
+    preds = np.delete(preds, list, axis=0)
+
     text += repr(len(preds))+" single parts of the song \"" + \
         str(name[0]) + \
         "\" predicted. \n\nHere are the Predictions grouped by Genres: \n"
