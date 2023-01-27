@@ -1,3 +1,6 @@
+<!-- GenRec by "The Smash Group" - TU Darmstadt, Data Science 2, WiSe 2022/23 -->
+<!-- HTML-File for Prediction of Genre  -->
+
 {% extends "mgcapp/layout.html" %}
 
 {% load static %}
@@ -6,15 +9,17 @@
 
 {% endblock %}
 {% block content %}
+<!-- Move this first block to the left, the second block is centered -->
 <div class="container text-left">
   <div class="row">
+    <!-- Display Logo of Data Science Project on the left side -->
     <div class="col">
       <img src="media/logo_data_science.png" alt="logo" width="300">
     </div>
     <div class="col-9">
       <h1 class="display-4 "> &nbsp; GenRec - Prediction </h1>
       <br>
-
+      <!-- Add Play-Button to play the uploaded song, based on path of songs in database-->
       <ul>
         {% if document %}
         <div class="col-sm-9 bg-light p-3 rounded-5">
@@ -26,8 +31,6 @@
             <source src="{{document.document.url}}" type="audio/x-wav" autostart="false">
           </audio>
         </div>
-
-
       </ul>
     </div>
   </div>
@@ -36,26 +39,30 @@
 
 <div class="container text-center">
   <div class="row">
+    <!-- Display the preformated prediction text from prediction.py-->
     <p>
     <pre><b>{{ document.prediction_text }}</b></pre>
     </p>
-
+    <!-- If Genres Infos is enabled, infos about the genre are shown here -->
     {% if genre_info %}
     <p>
-    <b>Here is everything you wanted to know about the genre:</b> <br>
-    {{ genre_info }} <br>
+      <b>Here is everything you wanted to know about the genre:</b> <br>
+      {{ genre_info }} <br>
     </p>
     {% endif %}
+    <!-- Add button to move to the recommender part of GenRec-->
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <div class="mb-3" align="center">
         <button type="submit" class="btn btn-primary" name="type" value="recommender">Get similar Song's</button>
       </div>
 
+      <!-- Here the time-analysis-plot of the genre prediction is shown for further knowledge-->
       <p>
       <pre><b>{{ more_stat }}</b></pre>
       </p>
       <div>
+        <!-- All Information about the prediction (including the picture) are saved into the database -->
         <img src="{{document.timeSeries.url}}" alt="Time-Series" class="center">
       </div>
       {% endif %}
@@ -63,8 +70,5 @@
 </div>
 <div class="col">
 </div>
-</div>
-</div>
-
 
 {% endblock %}

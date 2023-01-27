@@ -1,3 +1,7 @@
+
+<!-- GenRec by "The Smash Group" - TU Darmstadt, Data Science 2, WiSe 2022/23 -->
+<!-- HTML-File for Home-Page  -->
+
 {% extends "mgcapp/layout.html" %}
 
 {% load static %}
@@ -9,11 +13,12 @@
 {% block content %}
 <div class="container">
   <div class="row">
+    <!-- Display Logo of Data Science Project on the left side -->
     <div class="col">
       <img src="media/logo_data_science.png" alt="logo">
     </div>
     <div class="col-6 text-center">
-
+      <!-- Welcome Text of the Home Page-->
       <h1 class="display-4"> <b>GenRec</b></h1>
       <h2>Music Genre Classifier and Recommender</h2>
       <br>
@@ -22,18 +27,9 @@
       <p>WiSe 2022/2023</p>
       <br>
       <h3> Here are the last predicted songs: </h3><br>
-
-
-
-
-
-
-
-
-
+      <!-- Here are the last uploaded and predicted songs from the database displayed-->
+      <!-- The User can see the prediction (if already done) and play songs and users -->
       <ul>
-
-
         {% for obj in documents %}
         <div class="row align-items-start">
           <div class="col-sm-9 text-sm-left bg-light p-3 rounded-5" align="left">
@@ -41,6 +37,7 @@
             <b>&nbsp;Prediction: &nbsp;</b>{{ obj.prediction}}
           </div>
           <div class="col-sm-3 text-sm-left bg-light p-3 rounded-5" align="center">
+            <!-- Every Prediction Data of a song is saved and can be displayed with a click on the arrow-->
             <form method="post" enctype="multipart/form-data">
               {% csrf_token %}
               <button type="submit" class="btn btn-default" aria-label="Left Align" name="document" value="{{obj.name}}">

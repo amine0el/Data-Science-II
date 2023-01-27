@@ -1,3 +1,7 @@
+
+<!-- GenRec by "The Smash Group" - TU Darmstadt, Data Science 2, WiSe 2022/23 -->
+<!-- HTML-File for Layout of the Webserver  -->
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,7 +20,7 @@
 </head>
 
 <body>
-
+<!-- Navigation Bar to switch between uploading a file and the homepage-->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
     <div class="collapse navbar-collapse justify-content-center" id="navbarColor02">
@@ -32,14 +36,14 @@
 </nav>
 <h1></h1>
 
-
+<!-- Footer to display the Group Name and the Date-->
 <div class="body-content">
     {% block content %}
     {% endblock %}
     
     <div class="navbar fixed-bottom">
         <footer>
-            <p> The Smash Group © 2022</p>
+            <p>    GenRec - The Smash Group © 2022</p>
         </footer>
     </div>
 </div>

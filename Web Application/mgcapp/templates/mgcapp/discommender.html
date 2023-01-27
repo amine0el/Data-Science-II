@@ -1,3 +1,8 @@
+
+<!-- GenRec by "The Smash Group" - TU Darmstadt, Data Science 2, WiSe 2022/23 -->
+<!-- HTML-File for Discommender-Function  -->
+<!-- NOT USED ANY MORE??-->
+
 {% extends "mgcapp/layout.html" %}
 
 {% load static %}
@@ -8,53 +13,46 @@
 {% block content %}
 <div class="container text-left">
   <div class="row">
+    <!-- Display Logo of Data Science Project on the left side -->
     <div class="col">
       <img src="media/logo_data_science.png" alt="logo" width="300">
     </div>
     <div class="col-9">
-      <h1 class="display-4 "> &nbsp; GOT the beat</h1>
+      <h1 class="display-4 "> &nbsp; GenRec - Least similar Song</h1>
 
+      <!-- Display the songame and prediction if a file is in the message-->
       <ul>
         {% if document %}
         <div class="col-sm-9 bg-light p-3 rounded-5">
           <b>Songname: &nbsp;</b>{{ document.name}}<br>
           <b>Prediction: &nbsp;</b>{{ document.prediction}}
         </div>
+        <!-- Add Play-Button to play the uploaded song, based on path of songs in database-->
         <div class="col-sm-9 bg-light p-3 rounded-5">
           <audio controls="" name="media" style="width: 600px">
             <source src="{{document.document.url}}" type="audio/x-wav" autostart="false">
           </audio>
         </div>
         {% endif %}
-        
+
       </ul>
     </div>
   </div>
 </div>
 <div class="container text-center">
   <div class="row">
-
-    
-
-
     <p>
     <pre><b>Take a look at these songs, they are completely different!</b></pre>
     </p>
+    <!-- Display the song names and audio player of the simliar songs in the message-->
     <pre>
     {% for names,files in songfiles %}
-    
     <b>{{ names }}</b>
-  
     <audio controls="" name="media" style="width: 400px">
       <source src="{{files}}" type="audio/x-wav" autostart="false">
     </audio>
     {% endfor %}
   </pre>
-
-
-
-    
-    
   </div>
 
   <div class="col">

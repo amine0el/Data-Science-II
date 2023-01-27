@@ -1,3 +1,15 @@
+
+# GenRec - The Smash Group
+    # Music Genre Recommender and Classifier
+    # Project during Data Science 2
+    # WiSe 2022/2023
+    # TU Darmstadt
+
+# File forms.py
+    # Description: 
+        # Definitions for Django Database-Admin Page 
+
+
 from django import forms
 
 

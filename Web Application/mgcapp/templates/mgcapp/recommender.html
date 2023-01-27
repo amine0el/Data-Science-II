@@ -1,3 +1,6 @@
+<!-- GenRec by "The Smash Group" - TU Darmstadt, Data Science 2, WiSe 2022/23 -->
+<!-- HTML-File for Recommender-Function (best similarity and worst similarity)  -->
+
 {% extends "mgcapp/layout.html" %}
 
 {% load static %}
@@ -8,13 +11,14 @@
 {% block content %}
 <div class="container text-left">
   <div class="row">
+    <!-- Display Logo of Data Science Project on the left side -->
     <div class="col">
       <img src="media/logo_data_science.png" alt="logo" width="300">
     </div>
     <div class="col-9">
       <h1 class="display-4 "> &nbsp; GenRec - Recommender </h1>
       <br>
-
+      <!-- Display the songame and prediction if a file is in the message-->
       <ul>
         {% if document %}
         <div class="col-sm-9 bg-light p-3 rounded-5">
@@ -32,9 +36,10 @@
     </div>
   </div>
 </div>
+
 <div class="container text-center">
   <div class="row">
-
+    <!-- If this page should show the worst fitting songs one can direct to the discommender page via a button -->
     {% if not discommender %}
     <p>Not the right music for you? Click on the button to get totally different music: </p>
     <form method="post" enctype="multipart/form-data">
@@ -43,11 +48,12 @@
         <button type="submit" class="btn btn-primary" name="type" value="get-worst">Get least similar Song's</button>
       </div>
       {% endif %}
-
+      <!-- Here the introduction to the recommender text is displayed-->
       <p>
       <pre><b>{{ recommendation_text }}</b></pre>
       </p>
       <pre>
+    <!--  show and play similar/worst similar songs/songsnames -->
     {% for names,files in songfiles %}
     
     <b>{{ names }}</b>
@@ -57,11 +63,6 @@
     </audio>
     {% endfor %}
   </pre>
-
-
-
-
-
   </div>
 
   <div class="col">
