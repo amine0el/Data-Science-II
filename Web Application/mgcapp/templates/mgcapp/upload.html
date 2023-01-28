@@ -25,10 +25,11 @@
         {% endif %}
 
         {% if uploaded_file_url %}
+        <p>Thank you for the upload. We need extract necessary features out of the Song to recommend a genre. This will take a while...</p>
         <div class='progress-wrapper'>
           <div id='progress-bar' class='progress-bar' style="background-color: #68a9ef; width: 0%;">&nbsp;</div>
         </div>
-        <div id="progress-bar-message">Waiting for progress to start...</div>
+        <div id="progress-bar-message">Waiting for the feature extraction to start...</div>
         <script src="{% static 'celery_progress/celery_progress.js' %}"></script>
         <script>
         var progressUrl = "{% url 'celery_progress:task_status' task_id %}";
@@ -37,6 +38,7 @@
           $( resultElement ).append(
              $('<p>').text('Sum of all seconds is ' + result)
           );
+          window.location.replace("http://localhost:8006/prediction");
         }
       
       
@@ -46,11 +48,11 @@
       
       </script>
         
-
+      {% if task_id == 100 %}
         <div class="mb-3" align="center">
           <button type="submit" class="btn btn-primary" name="type" value="genre">Get predicted Genre</button>
         </div>
-
+      {% endif %}
         {% endif %}
         
         

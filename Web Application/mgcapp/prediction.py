@@ -57,7 +57,7 @@ def extract_extern(filedir, filename,progress_recorder):
             break
         length = len(y)
         offset += duration
-        progress_recorder.set_progress(i, (end-start)/duration, f'On iteration {i}')
+        progress_recorder.set_progress(round(i/((end-start)/duration)*100,1), 100)
         # ________ chroma_stft _______
         chroma_stft = librosa.feature.chroma_stft(y=y, sr=sr)
         chroma_stft_mean = np.mean(chroma_stft)
