@@ -34,25 +34,20 @@
         <script>
         var progressUrl = "{% url 'celery_progress:task_status' task_id %}";
       
-        function customResult(resultElement, result) {
-          $( resultElement ).append(
-             $('<p>').text('Sum of all seconds is ' + result)
+        function customResult(progressBarElement, progressBarMessageElement) {
+          progressBarMessageElement.innerHTML = (
+          '<br><br><div class="mb-3" align="center"><button type="submit" class="btn btn-primary" name="type" value="genre">Get predicted Genre</button></div>'
           );
-          window.location.replace("http://localhost:8006/prediction");
+         
         }
       
       
         CeleryProgressBar.initProgressBar(progressUrl, {
-              onResult: customResult,
-        })
+              onSuccess: customResult
+        });
       
       </script>
-        
-      {% if task_id == 100 %}
-        <div class="mb-3" align="center">
-          <button type="submit" class="btn btn-primary" name="type" value="genre">Get predicted Genre</button>
-        </div>
-      {% endif %}
+      
         {% endif %}
         
         
