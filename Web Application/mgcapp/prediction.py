@@ -131,8 +131,11 @@ def extract_extern(filedir, filename,progress_recorder):
 
 
 def extract_and_save(filedir, filename, progress_recorder):
+    path = "features_last_song.csv"
     df = pd.DataFrame(extract_extern(filedir, filename,progress_recorder))
-    df.to_csv("features_last_song.csv")
+    df.to_csv(path)
+    return path
+
 
 
 def predict_last(features_csv):
@@ -253,9 +256,9 @@ def avg_algorithm_probability():
 # Print Binned Statistics
 
 
-def get_binned_static():
+def get_binned_static(path):
     text = ""
-    preds, proba, name = predict_last("features_last_song.csv")
+    preds, proba, name = predict_last(path)
     my_dict = get_genre_dict()
     average_proba = []
     text += repr(len(preds))+" single parts of the song \"" + \

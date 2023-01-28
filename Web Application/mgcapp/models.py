@@ -10,6 +10,6 @@ class Document(models.Model):
     timeSeries = models.ImageField(upload_to='pictures/')
     prediction = models.CharField(max_length=255, blank=True)
     recommender = models.CharField(max_length=255, blank=True)
-        
+    extraction = models.FileField(upload_to='extractions/')
 
 
