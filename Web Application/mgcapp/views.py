@@ -54,7 +54,8 @@ def simple_upload(request):
                 qs = Document(name=myfile.name,document=myfile)
                 qs.save()
                 RUNNING_EXTRACTION = True
-                task = extraction_async.delay(qs)
+                
+                task = extraction_async.delay()
                 # Start extraction here
                 
                 return render(request, 'mgcapp/upload.html',{
