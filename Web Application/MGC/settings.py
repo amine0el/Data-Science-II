@@ -156,3 +156,4 @@ CELERY_TIMEZONE = 'Europe/Berlin'
 
 
 CSRF_TRUSTED_ORIGINS=['http://localhost:8006']
+RUNNING_EXTRACTION = False

@@ -5,10 +5,15 @@ from django.shortcuts import render, redirect
 from django.conf import settings
 from django.core.files.images import ImageFile
 from django.core.files.storage import FileSystemStorage
+from MGC.settings import RUNNING_EXTRACTION
+# global variable for extraction
+RUNNING_EXTRACTION = False
 
 from mgcapp.prediction import *
 from mgcapp.recommender import *
-from mgcapp.tasks import go_to_sleep
+from mgcapp.tasks import extraction_async
+
+
 
 def home(request):
     if request.method == 'POST':
@@ -48,8 +53,13 @@ def simple_upload(request):
             if (".mp3" in myfile.name) or (".wav" in myfile.name):
                 qs = Document(name=myfile.name,document=myfile)
                 qs.save()
+                RUNNING_EXTRACTION = True
+                task = extraction_async.delay(qs)
+                # Start extraction here
+                
                 return render(request, 'mgcapp/upload.html',{
-                    'uploaded_file_url':True
+                    'uploaded_file_url':True,
+                    'task_id' : task.task_id
                 })
             else:
                 return render(request, 'mgcapp/upload.html', {
@@ -60,6 +70,7 @@ def simple_upload(request):
     return render(request, 'mgcapp/upload.html')
 
 def extraction_view(request):
+    #if running_Extraction = False:
     if request.method == 'POST':
         data = request.POST
         action = data.get("type")
@@ -72,13 +83,7 @@ def extraction_view(request):
                     'format_error': "Something went wrong! :)"
                 })
     documents = Document.objects.last()
-    try:
-        extract_and_save(documents.document.path,documents.name)
-    except:
-        print("Error")
-        return render(request, 'mgcapp/recommender.html', {
-                    'format_error': "File is not readable! :)"
-                })
+    
     pred, pred_text = get_binned_static()
     genre_info = get_genre_info(pred)
     pred_time_series()
@@ -177,7 +182,3 @@ def recommender_view(request):
 
 
 
-def index(request):
-    task = go_to_sleep.delay(1)
-    
-    return render(request, 'mgcapp/index.html', {'task_id' : task.task_id})

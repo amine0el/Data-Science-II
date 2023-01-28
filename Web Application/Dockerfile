@@ -1,5 +1,5 @@
 # For more information, please refer to https://aka.ms/vscode-docker-python
-FROM --platform=linux/amd64 python:3.9.16-bullseye
+FROM python:3.9.16-bullseye
 
 EXPOSE 8000
 

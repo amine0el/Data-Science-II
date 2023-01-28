@@ -35,7 +35,7 @@ def get_genre_dict():
 # Extract Features and saves as dataframe
 
 
-def extract_extern(filedir, filename):
+def extract_extern(filedir, filename,progress_recorder):
     offset = 0
     duration = 3
     go = True
@@ -47,7 +47,8 @@ def extract_extern(filedir, filename):
         audio.delete()
         audio.save()
     length_audio = int(librosa.get_duration(filename=filedir))
-    offset = int(length_audio/4)
+    start = int(length_audio/4)
+    offset = start
     end = int(length_audio*3/4)
     while (go):
         y, sr = librosa.load(filedir, offset=offset, duration=duration)
@@ -56,7 +57,7 @@ def extract_extern(filedir, filename):
             break
         length = len(y)
         offset += duration
-
+        progress_recorder.set_progress(i, (end-start)/duration, f'On iteration {i}')
         # ________ chroma_stft _______
         chroma_stft = librosa.feature.chroma_stft(y=y, sr=sr)
         chroma_stft_mean = np.mean(chroma_stft)
@@ -129,8 +130,8 @@ def extract_extern(filedir, filename):
     return csv
 
 
-def extract_and_save(filedir, filename):
-    df = pd.DataFrame(extract_extern(filedir, filename))
+def extract_and_save(filedir, filename, progress_recorder):
+    df = pd.DataFrame(extract_extern(filedir, filename,progress_recorder))
     df.to_csv("features_last_song.csv")
 
 
