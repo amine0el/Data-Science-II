@@ -5,9 +5,7 @@ from django.shortcuts import render, redirect
 from django.conf import settings
 from django.core.files.images import ImageFile
 from django.core.files.storage import FileSystemStorage
-from MGC.settings import RUNNING_EXTRACTION
-# global variable for extraction
-RUNNING_EXTRACTION = False
+
 
 from mgcapp.prediction import *
 from mgcapp.recommender import *
@@ -53,15 +51,13 @@ def simple_upload(request):
             if (".mp3" in myfile.name) or (".wav" in myfile.name):
                 qs = Document(name=myfile.name,document=myfile)
                 qs.save()
-                RUNNING_EXTRACTION = True
-                
                 task = extraction_async.delay()
                 # Start extraction here
                 
                 return render(request, 'mgcapp/upload.html',{
                     'uploaded_file_url':True,
                     'task_id' : task.task_id
-                })
+                })                
             else:
                 return render(request, 'mgcapp/upload.html', {
                     'format_error': "Please use a valid song format for example .mp3 or .wav!"
