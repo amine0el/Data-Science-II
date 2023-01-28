@@ -80,8 +80,8 @@ def extraction_view(request):
                     'format_error': "Something went wrong! :)"
                 })
     documents = Document.objects.last()
-    
-    pred, pred_text = get_binned_static(documents.document.path)
+    pred, pred_text = get_binned_static("features_last_song.csv")
+    #pred, pred_text = get_binned_static(documents.document.path)
     genre_info = get_genre_info(pred)
     pred_time_series()
     with open('media/last_time_series.png', 'rb') as existing_file:

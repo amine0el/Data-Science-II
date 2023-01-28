@@ -12,10 +12,10 @@ def extraction_async(self):
     progress_recorder = ProgressRecorder(self)
     path = extract_and_save(documents.document.path,documents.name, progress_recorder)
     RUNNING_EXTRACTION = False
-    with open(path, 'r') as existing_file:
-        django_file = File(existing_file)
-        documents.extraction = django_file
-        documents.save()
+    #with open(path, 'r') as existing_file:
+    #    django_file = File(existing_file)
+    #    documents.extraction = django_file
+    #    documents.save()
     
     #progress_recorder.set_progress(i + 1, 100, f'On iteration {i}')
     return 'Done'
