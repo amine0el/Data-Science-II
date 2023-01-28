@@ -81,7 +81,7 @@ def extraction_view(request):
                 })
     documents = Document.objects.last()
     
-    pred, pred_text = get_binned_static(documents.document.path)
+    pred, pred_text = get_binned_static(documents.extraction.path)
     genre_info = get_genre_info(pred)
     pred_time_series()
     with open('media/last_time_series.png', 'rb') as existing_file:
@@ -99,8 +99,7 @@ def extraction_view(request):
     })
     
 def repredict(documents):
-   
-    pred, pred_text = get_binned_static(documents.document.path)
+    pred, pred_text = get_binned_static(documents.extraction.path)
     genre_info = get_genre_info(pred)
     pred_time_series()
     with open('media/last_time_series.png', 'rb') as existing_file:
