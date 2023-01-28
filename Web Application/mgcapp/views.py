@@ -1,3 +1,17 @@
+
+# GenRec - The Smash Group
+    # Music Genre Recommender and Classifier
+    # Project during Data Science 2
+    # WiSe 2022/2023
+    # TU Darmstadt
+
+# File views.py
+    # Description: 
+        # Main Page of the Webserver --> Here are the functions of each webpage defined. 
+        # The file uses redirects and renders to navigate through the pages and display html pages
+        # The assignment of the urls to the function is done in the urls.py
+
+#Import of Django-Libraries
 from mgcapp.forms import DocumentForm
 from mgcapp.models import Document
 from django.http import HttpResponse
@@ -7,47 +21,61 @@ from django.core.files.images import ImageFile
 from django.core.files.storage import FileSystemStorage
 
 
+# Import GenRec specific functions for recommendation and Classification/prediction
 from mgcapp.prediction import *
 from mgcapp.recommender import *
 from mgcapp.tasks import extraction_async
 
 
 
+# Function used to display the home page
+    # Description: The home-page displays the welcome text and the last predicted songs. 
+    # Each Song can be listened to and with a click on a button predicted/last prediction displayed
+    # returns: html page with songs from the database or render to prediction.html
 def home(request):
+    # Check if Button is clicked to view a prediction of a song
     if request.method == 'POST':
         data = request.POST
         if "document" in data:
+            # Song name is coded into the value of the button to know what song is desired
             action = data.get("document")
             if action != "":
                 documents = Document.objects.filter(name__icontains=action)
                 documents = documents[0]
+                # if there is no prediction is the database, repredict the song
                 if documents.prediction == "":
                     documents, genre_info=repredict(documents)
                     return render(request, 'mgcapp/prediction.html', {
                     'document': documents,
-                    'genre_info': genre_info})      
-                else:
+                    'genre_info': genre_info,
+                    'old_pred':True})      
+                else: # Prediction is already done and only needs to be displayed
                     genre_info = get_genre_info(documents.prediction)
                     return render(request, 'mgcapp/prediction.html', {
                         'document': documents,
-                        'genre_info': genre_info})
+                        'genre_info': genre_info, 
+                        'old_pred': True})
         else:
             return redirect("home")
-    else:
+    else: # Normal HTTP-GET of home-page return the last 10 uploaded songs with their prediction
         documents = Document.objects.order_by('-uploaded_at').all()[:10]
         return render(request, 'mgcapp/home.html', { 'documents': documents })
 
-
+# Function used to display the upload-page
+    # Description: The upload-function checks if the HTTP-POST contains a file and uploads it to the database
+    # If the file is uploaded it redirects the user to the prediction-page
+    # returns: html page with file upload input or with button to prediction page
 def simple_upload(request):
     if request.method == 'POST':
         data = request.POST
         action = data.get("type")
-        if action == "genre":
-            
-            
+        # Checks if button to prediction is activated and redirects
+        if action == "genre":        
             return redirect('prediction')
+        # Checks for uploaded file and saves it in the database
         elif action == "file" and 'myfile' in request.FILES:
             myfile = request.FILES['myfile']
+            # Only Wav- and mp3-files are supported currently...
             if (".mp3" in myfile.name) or (".wav" in myfile.name):
                 qs = Document(name=myfile.name,document=myfile)
                 qs.save()
@@ -58,14 +86,17 @@ def simple_upload(request):
                     'uploaded_file_url':True,
                     'task_id' : task.task_id
                 })                
-            else:
+            else:# Different formats results in an Format-Error
                 return render(request, 'mgcapp/upload.html', {
                     'format_error': "Please use a valid song format for example .mp3 or .wav!"
                 })
-            
-   
     return render(request, 'mgcapp/upload.html')
 
+# Function used to display the prediction page
+    # Description: The prediction page handles the feature extraction and displays the prediction text
+    # 
+    # Each Song can be listened to and with a click on a button predicted/last prediction displayed
+    # returns: html page with songs from the database or render to prediction.html
 def extraction_view(request):
     #if running_Extraction = False:
     if request.method == 'POST':

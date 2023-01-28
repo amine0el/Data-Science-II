@@ -1,7 +1,19 @@
+
+# GenRec - The Smash Group
+    # Music Genre Recommender and Classifier
+    # Project during Data Science 2
+    # WiSe 2022/2023
+    # TU Darmstadt
+
+# File models.py
+    # Description: 
+        # Definitions for Django Database Columns used to store the songs and additional data of it
+
+
 from django.db import models
 
 
-# Create your models here.
+# Creation of new Class "Document" to store songs (document) and additional data (name, upload time, prediction etc)
 class Document(models.Model):
     name = models.CharField(max_length=255, blank=True)
     document = models.FileField(upload_to='documents/')

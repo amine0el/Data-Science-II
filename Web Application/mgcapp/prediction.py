@@ -1,18 +1,33 @@
+
+# GenRec - The Smash Group
+    # Music Genre Recommender and Classifier
+    # Project during Data Science 2
+    # WiSe 2022/2023
+    # TU Darmstadt
+
+# File prediction.py
+    # Description: 
+        # Main Page of the Classifier/Prediction Logic behind GenRec. 
+        # With the click on the button after upload the prediction uses the last song of the database and start feature extraction.
+        # The XGBoost Model is imported and used to predict the new songs. The file also contains the statistical algorithm behind the prediction. 
+        # In Addition the Infos about the Genre are saved and processed here
+
+
 # Import Libraries:
+import warnings
+import librosa
+import numpy as np
+import pandas as pd
+from mutagen.easyid3 import EasyID3
+from matplotlib import pyplot as plt
+from matplotlib import dates as mdates
 import xgboost
 import matplotlib
 matplotlib.use('agg')
-from matplotlib import dates as mdates
-from matplotlib import pyplot as plt
-from mutagen.easyid3 import EasyID3
-import pandas as pd
-import numpy as np
-import librosa
-import warnings
 warnings.filterwarnings('ignore')
 
 
-# GLobal Info Text:
+# Info Text about the genres saved globally as a dictionary:
 genres_info = {"blues": "Blues is a music genre that developed in the United States in the early 20th century. It has its roots in African-American spirituals, work and field songs. Blues is characterized by emotional lyrics that often deal with themes such as heartbreak, poverty and oppression. The music itself is characterized by the use of blues chords, a melancholy rhythm and improvised guitar and harmonica solos. Blues has also influenced many other music genres, including rock and roll, jazz, and country. Today, there are many different subgenres of blues, such as Chicago blues, Delta blues, and Texas blues.",
                "classical": "Classical music is a genre of music that encompasses a wide range of styles and periods, dating back to the 9th century. It is typically characterized by its complexity, formal structure and the use of orchestras, choirs, and solo performers. It often features a wide range of dynamic expressions, intricate melodies and harmonies. Classical music has its origins in the Western musical tradition and it is usually written by composers with formal training. The classical period is also divided into different eras like Baroque, classical, romantic and contemporary. Classical music is also associated with formal concert performances, and is often heard in concert halls, opera houses, and ballet performances. It's considered as a serious and demanding art form which requires dedicated listening.",
                "country": "Country music is known for its ballads and dance tunes with simple form, folk lyrics, and harmonies accompanied by string instruments such as electric and acoustic guitars, steel guitars (such as pedal steels and dobros), banjos, fiddles, and harmonicas. Though it is primarily rooted in various forms of American folk music, such as old-time music and Appalachian music, many other traditions, including African-American, Mexican, Irish, and Hawaiian music, have also had a formative influence on the genre.[8] Blues modes have been used extensively throughout its recorded history.",
@@ -25,14 +40,14 @@ genres_info = {"blues": "Blues is a music genre that developed in the United Sta
                "rock": "Rock is a genre of music that emerged in the 1950s and is characterized by its powerful and energetic sound. It's primarily played with guitar, bass, drums, and vocals and has roots in blues music. Over the years, rock has evolved into many subgenres such as classic rock, hard rock, punk rock, grunge and alternative rock. Rock music often has a rebellious and provocative nature and addresses themes such as love, rebellion and social injustice. Rock music has also had a strong impact on other music genres and cultures worldwide."}
 
 
+# Function used to map the values 0 to 9 from learning to the correct genres
+    # returns: dictionary with genres and numbers
 def get_genre_dict():
     genres = ["blues", "classical", "country", "disco",
               "hiphop", "jazz", "metal", "pop", "reggae", "rock"]
     # Create Dictionary to map genres to numbers of the algorithm
     my_dict = dict(zip(range(len(genres)), genres))
     return my_dict
-
-# Extract Features and saves as dataframe
 
 
 def extract_extern(filedir, filename,progress_recorder):
@@ -42,16 +57,22 @@ def extract_extern(filedir, filename,progress_recorder):
     i = 0
     csv = []
     length = 0
-    if(".mp3" in filename):
+    # Removing Meta-Data due to Errors with it
+    if (".mp3" in filename):
         audio = EasyID3(filedir)
         audio.delete()
         audio.save()
+
+    # Get length of song and use only the part from 1/4 to 3/4 of the songduration
     length_audio = int(librosa.get_duration(filename=filedir))
     start = int(length_audio/4)
     offset = start
     end = int(length_audio*3/4)
+    # Iterate through the song parts and extract features
     while (go):
+        # Load Song-Part
         y, sr = librosa.load(filedir, offset=offset, duration=duration)
+        # if end is reached --> stop
         if (length != len(y) and length != 0) or (offset + duration) >= end:
             i = 0
             break
@@ -98,6 +119,7 @@ def extract_extern(filedir, filename,progress_recorder):
         tempo = librosa.beat.tempo(onset_envelope=onset_env, sr=sr)[0]
         # _____mfcc______
         mfcc = librosa.feature.mfcc(y=y, sr=sr)
+        # Creating of Dictionary containing all features and additonal data
         mdict = {"name": filename,
                  "name_v": filename+"."+str(i),
                  "filedir": filedir,
@@ -124,7 +146,7 @@ def extract_extern(filedir, filename,progress_recorder):
         for index, a in enumerate(mfcc, start=1):
             mdict["mfcc"+str(index)+"_mean"] = np.mean(a)
             mdict["mfcc"+str(index)+"_var"] = np.var(a)
-
+        # Add dictionary to the List of Song-Parts
         csv.append(mdict)
         i += 1
     return csv
@@ -137,7 +159,9 @@ def extract_and_save(filedir, filename, progress_recorder):
     return path
 
 
-
+# Function to predict features in a given csv
+    # Description: Loads the feature csv, removes non-features columns and predict it with XGBoost
+    # Returns: Array of Predictions for each part and their probabilities given by XGBoost
 def predict_last(features_csv):
     xgb = xgboost.XGBClassifier()
     xgb.load_model("./Trained_Models/xgb_model.txt")
@@ -148,14 +172,16 @@ def predict_last(features_csv):
     proba = xgb.predict_proba(data)  # get Probabilities
     return preds, proba, name
 
-
+# Function to plot predicitions over time 
+    # Description: Extracts the start times from the features csv, removes the values with low probability and plot it over time with matplotlib
+    # Return: Instead of returning something the function saves the time series as a picture
 def pred_time_series():
     # Sort time and prediction
     preds, proba, name = predict_last("features_last_song.csv")
     df = pd.read_csv("features_last_song.csv")
     start = df['start']  # Get start time from dataframe
     my_dict = get_genre_dict()
-    genres = my_dict.values()
+
 # Remove Predictions where the probability is less than then setted percentage
     percentage = 0.50
     i = 1
@@ -182,12 +208,14 @@ def pred_time_series():
     ax.scatter(time, prediction_label, linewidth=2.0)
     plt.xlabel("Time [min]")
     plt.savefig("media/last_time_series.png")
-    #plt.close('all')
-   
-
-# Show the Probabilities of every prediction (two main classes):
+    # plt.close('all')
 
 
+
+# Show the Probabilities of every prediction (two main classes)
+    # Description: Function reduces the list of predictions and probabilities to the two predictions with the highest probability
+    # Return: Formated String with 2 Predictions and Probabilities for every song part
+    # Only used for testing right now!
 def get_first_preds_proba(no_proba):
     preds_small = ""
     my_dict = get_genre_dict()
@@ -210,13 +238,14 @@ def get_first_preds_proba(no_proba):
             preds_small += "\n"
     return preds_small
 
-
+# Function to return the genre information to the views.py
 def get_genre_info(pred):
     return genres_info[pred]
 
-# Show the Probabilities of every prediction (all classes):
 
-
+# Show the Probabilities of every prediction (all classes)
+    # Discription: Instead of showing only the two main classes this function shows all probabilities to the predictions
+        # Only used for testing right now!
 def get_preds_all_proba():
     my_dict = get_genre_dict()
     temp = ""
@@ -230,9 +259,10 @@ def get_preds_all_proba():
         temp += "\n"
     return temp
 
-# Not ready: Should be the mean of every probability in every bin (so average proba over all metal predictions)
-
-
+# Calculates the average probability of every class over all predictions
+    # Description: The function iterates through all predictions and accumulates the probabilities with more than 50%
+    # It saves the number of entries per class and calculates the average with that
+    # Return: Formated String with Average Probability of each class
 def avg_algorithm_probability():
     preds, proba = predict_last("features_last_song.csv")
     my_dict = get_genre_dict()
@@ -261,11 +291,23 @@ def get_binned_static(path):
     preds, proba, name = predict_last(path)
     my_dict = get_genre_dict()
     average_proba = []
+    # Find the predictions with less than 50% Probability
+    percentage = 0.50
+    i = 1
+    list = []
+    while i < len(preds):
+        if proba[i][proba[i].argmax()] < percentage:
+            list.append(i)
+        i += 1
+# Delete the elements and resize the list
+    proba = np.delete(proba, list, axis=0)
+    preds = np.delete(preds, list, axis=0)
+
     text += repr(len(preds))+" single parts of the song \"" + \
         str(name[0]) + \
         "\" predicted. \n\nHere are the Predictions grouped by Genres: \n"
 
-    # Print all predictions binned on the gernes
+    # Print all predictions binned on the genres
     for i in range(len(my_dict)):
         if i < len(np.bincount(preds)):
             text = text + my_dict[i] + ": " + repr(np.bincount(preds)[i]) + " (" + repr(
