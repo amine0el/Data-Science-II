@@ -24,7 +24,7 @@ from django.core.files.storage import FileSystemStorage
 # Import GenRec specific functions for recommendation and Classification/prediction
 from mgcapp.prediction import *
 from mgcapp.recommender import *
-from mgcapp.tasks import extraction_async
+from mgcapp.tasks import extraction_async, extraction_full_async
 
 
 
@@ -101,15 +101,17 @@ def extraction_view(request):
     #if running_Extraction = False:
     if request.method == 'POST':
         data = request.POST
-        action = data.get("type")
-        if action == "recommender":
+        if "type" in data:
+            action = data.get("type")
             
-            
-            return redirect('recommender')
-        else: 
-            return render(request, 'mgcapp/recommender.html', {
-                    'format_error': "Something went wrong! :)"
-                })
+            if action == "recommender":
+                
+                
+                return redirect('recommender')
+            else: 
+                return render(request, 'mgcapp/recommender.html', {
+                        'format_error': "Something went wrong! :)"
+                    })
     documents = Document.objects.last()
     
     pred, pred_text = get_binned_static(documents.extraction.path)
@@ -123,10 +125,12 @@ def extraction_view(request):
     documents.prediction = pred
     documents.prediction_text = pred_text
     documents.save()
+    task = extraction_full_async.delay()
     
     return render(request, 'mgcapp/prediction.html', {
         'document': documents,
-        'genre_info': genre_info
+        'genre_info': genre_info,
+        'task_id' : task.task_id
     })
     
 def repredict(documents):

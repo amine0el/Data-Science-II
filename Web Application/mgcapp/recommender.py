@@ -10,7 +10,7 @@ from mgcapp.models import Document
 from MGC.settings import BASE_DIR
 from mutagen.easyid3 import EasyID3
 
-def read_features():
+def read_features(progress_recorder):
     documents = Document.objects.last()
     if(".mp3" in documents.name):
         audio = EasyID3(documents.document.path)
@@ -18,8 +18,8 @@ def read_features():
         audio.save()
    
     length = librosa.get_duration(filename=documents.document.path)
-    df = extract(documents.document.path, documents.name, length)
-   
+    df = extract(documents.document.path, documents.name, length, progress_recorder)
+    progress_recorder.set_progress(100, 100)
 
     return df
 
@@ -89,7 +89,8 @@ def extract_one_feature(y, sr):
     return mdict
 
 
-def extract(filedir, name, length):
+def extract(filedir, name, length, progress_recorder):
+    progress_recorder.set_progress(30, 100)
     y, sr = librosa.load(filedir, duration=length-1)
     mdict_ = extract_one_feature(y, sr)
     mdict = {}
@@ -102,14 +103,14 @@ def extract(filedir, name, length):
 def get_extraction_similarity(type):
     # Read data
     path = str(BASE_DIR) + '/mgcapp/'
-    if type == "best":
-        data = read_features()
-        data.to_csv(path + "features_last_full_song.csv")
-        data = data.set_index('name')
-        data = data.drop(columns=['filedir'])
-    else:
-        data = pd.read_csv(path + "features_last_full_song.csv", index_col='name')
-        data = data.drop(columns=['filedir', 'Unnamed: 0'])
+    #if type == "best":
+        #data = read_features()
+        #data.to_csv(path + "features_last_full_song.csv")
+        #data = data.set_index('name')
+        #data = data.drop(columns=['filedir'])
+    #else:
+    data = pd.read_csv(path + "features_last_full_song.csv", index_col='name')
+    data = data.drop(columns=['filedir', 'Unnamed: 0'])
     
     
     df_extraction = pd.read_csv(path +'extraction_fma_full.csv', index_col=['name', 'filename'])

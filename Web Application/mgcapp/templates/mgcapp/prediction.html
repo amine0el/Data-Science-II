@@ -50,15 +50,31 @@
       {{ genre_info }} <br>
     </p>
     {% endif %}
-    <!-- Add button to move to the recommender part of GenRec-->
-    {% if not old_pred %}
-    <form method="post" enctype="multipart/form-data">
-      {% csrf_token %}
-      <div class="mb-3" align="center">
-        <button type="submit" class="btn btn-primary" name="type" value="recommender">Get similar Song's</button>
-      </div>
-    </form>
-    {% endif %}
+
+    {% if task_id %}
+    <div class='progress-wrapper'>
+      <div id='progress-bar' class='progress-bar' style="background-color: #68a9ef; width: 0%;">&nbsp;</div>
+    </div>
+    <div id="progress-bar-message">Waiting for the Recommender to start...</div>
+    <script src="{% static 'celery_progress/celery_progress.js' %}"></script>
+    <script>
+    var progressUrl = "{% url 'celery_progress:task_status' task_id %}";
+  
+    function customResult(progressBarElement, progressBarMessageElement) {
+      progressBarMessageElement.innerHTML = (
+      '<br><br><form method="post" enctype="multipart/form-data">{% csrf_token %}<div class="mb-3" align="center"><button type="submit" class="btn btn-primary" name="type" value="recommender">Get similar Songs</button></div></form>'
+      );
+     
+    }
+  
+  
+    CeleryProgressBar.initProgressBar(progressUrl, {
+          onSuccess: customResult
+    });
+  
+  </script>
+  {% endif %}
+   
       <!-- Here the time-analysis-plot of the genre prediction is shown for further knowledge-->
       <p>
       <pre><b>{{ more_stat }}</b></pre>
