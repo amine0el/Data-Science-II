@@ -29,33 +29,25 @@ from mgcapp.recommender import *
     # Each Song can be listened to and with a click on a button predicted/last prediction displayed
     # returns: html page with songs from the database or render to prediction.html
 def home(request):
-    # Check if Button is clicked to view a prediction of a song
-    if request.method == 'POST':
-        data = request.POST
-        if "document" in data:
-            # Song name is coded into the value of the button to know what song is desired
-            action = data.get("document")
-            if action != "":
-                documents = Document.objects.filter(name__icontains=action)
-                documents = documents[0]
-                # if there is no prediction is the database, repredict the song
-                if documents.prediction == "":
-                    documents, genre_info=repredict(documents)
-                    return render(request, 'mgcapp/prediction.html', {
-                    'document': documents,
-                    'genre_info': genre_info,
-                    'old_pred':True})      
-                else: # Prediction is already done and only needs to be displayed
-                    genre_info = get_genre_info(documents.prediction)
-                    return render(request, 'mgcapp/prediction.html', {
-                        'document': documents,
-                        'genre_info': genre_info, 
-                        'old_pred': True})
-        else:
-            return redirect("home")
-    else: # Normal HTTP-GET of home-page return the last 10 uploaded songs with their prediction
-        documents = Document.objects.order_by('-uploaded_at').all()[:10]
-        return render(request, 'mgcapp/home.html', { 'documents': documents })
+    documents = Document.objects.order_by('-uploaded_at').all()[:10]
+    return render(request, 'mgcapp/home.html', { 'documents': documents })
+
+def prediction_detail_view(request, name):
+    documents = Document.objects.filter(name__icontains=name)
+    documents = documents[0]
+    # if there is no prediction is the database, repredict the song
+    if documents.prediction == "":
+        documents, genre_info=repredict(documents)
+        return render(request, 'mgcapp/prediction.html', {
+        'document': documents,
+        'genre_info': genre_info,
+        'old_pred':True})      
+    else: # Prediction is already done and only needs to be displayed
+        genre_info = get_genre_info(documents.prediction)
+        return render(request, 'mgcapp/prediction.html', {
+            'document': documents,
+            'genre_info': genre_info, 
+            'old_pred': True})
 
 # Function used to display the upload-page
     # Description: The upload-function checks if the HTTP-POST contains a file and uploads it to the database

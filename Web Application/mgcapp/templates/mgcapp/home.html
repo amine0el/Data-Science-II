@@ -15,7 +15,7 @@
   <div class="row">
     <!-- Display Logo of Data Science Project on the left side -->
     <div class="col">
-      <img src="media/logo_data_science.png" alt="logo">
+      <img src="media/logo_data_science.png" alt="logo" width="300">
     </div>
     <div class="col-6 text-center">
       <!-- Welcome Text of the Home Page-->
@@ -38,10 +38,8 @@
           </div>
           <div class="col-sm-3 text-sm-left bg-light p-3 rounded-5" align="center">
             <!-- Every Prediction Data of a song is saved and can be displayed with a click on the arrow-->
-            <form method="post" enctype="multipart/form-data">
-              {% csrf_token %}
-              <button type="submit" class="btn btn-default" aria-label="Left Align" name="document" value="{{obj.name}}">
-                {% bs_icon 'box-arrow-up-right'%}
+              <button class="btn btn-default" aria-label="Left Align" >
+                <a href = "{% url 'prediction_detail_view' obj.name %}"> {% bs_icon 'box-arrow-up-right'%}</a>
               </button>
           </div>
         </div>
