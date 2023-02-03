@@ -51,14 +51,14 @@
     </p>
     {% endif %}
     <!-- Add button to move to the recommender part of GenRec-->
-    {% if not old_pred %}
-    <form method="post" enctype="multipart/form-data">
-      {% csrf_token %}
       <div class="mb-3" align="center">
-        <button type="submit" class="btn btn-primary" name="type" value="recommender">Get similar Song's</button>
+        <a href="{% url 'recommender' document.name %}">
+        <button class="btn btn-primary" >
+          Get similar Song's
+          </button>
+        </a>
       </div>
     </form>
-    {% endif %}
       <!-- Here the time-analysis-plot of the genre prediction is shown for further knowledge-->
       <p>
       <pre><b>{{ more_stat }}</b></pre>

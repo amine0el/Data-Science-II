@@ -136,9 +136,10 @@ def repredict(documents):
 
     
     
-def recommender_view_worst(request):
-    recom_series = get_extraction_similarity("worst")
-    documents = Document.objects.last()
+def recommender_view_worst(request,name):
+    recom_series = get_extraction_similarity("worst",name)
+    documents = Document.objects.filter(name__icontains=name)
+    documents = documents[0]
     print(documents.document.url)
     path = path = '/media/fma_medium_unsortiert/'
 
@@ -160,20 +161,10 @@ def recommender_view_worst(request):
         'discommender': True
     })
 
-def recommender_view(request):
-    if request.method == 'POST':
-        data = request.POST
-        action = data.get("type")
-        if action == "get-worst":
-            
-            
-            return redirect('recommender-worst')
-        else: 
-            return render(request, 'mgcapp/recommender.html', {
-                    'format_error': "Something went wrong! :)"
-                })
-    recom_series = get_extraction_similarity("best")
-    documents = Document.objects.last()
+def recommender_view(request, name):
+    recom_series = get_extraction_similarity("best",name)
+    documents = Document.objects.filter(name__icontains=name)
+    documents = documents[0]
     print(documents.document.url)
     path = '/media/fma_medium_unsortiert/'
 

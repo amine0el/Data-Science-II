@@ -27,7 +27,7 @@
         </div>
         <div class="col-sm-9 bg-light p-3 rounded-5">
           <audio controls="" name="media" style="width: 600px">
-            <source src="{{document.document.url}}" type="audio/x-wav" autostart="false">
+            <source src="{{document.document.url}}" type="audio/mp3" autostart="false">
           </audio>
         </div>
         {% endif %}
@@ -40,14 +40,14 @@
 <div class="container text-center">
   <div class="row">
     <!-- If this page should show the worst fitting songs one can direct to the discommender page via a button -->
-    {% if not discommender %}
     <p>Not the right music for you? Click on the button to get totally different music: </p>
-    <form method="post" enctype="multipart/form-data">
-      {% csrf_token %}
-      <div class="mb-3" align="center">
-        <button type="submit" class="btn btn-primary" name="type" value="get-worst">Get least similar Song's</button>
+    <div class="mb-3" align="center">
+        <a href="{% url 'recommender-worst' document.name %}">
+        <button class="btn btn-primary" >
+          Get least similar Song's
+          </button>
+        </a>
       </div>
-      {% endif %}
       <!-- Here the introduction to the recommender text is displayed-->
       <p>
       <pre><b>{{ recommendation_text }}</b></pre>

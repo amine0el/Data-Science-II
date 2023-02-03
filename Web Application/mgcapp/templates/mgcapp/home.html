@@ -38,9 +38,11 @@
           </div>
           <div class="col-sm-3 text-sm-left bg-light p-3 rounded-5" align="center">
             <!-- Every Prediction Data of a song is saved and can be displayed with a click on the arrow-->
+            <a href = "{% url 'prediction_detail_view' obj.name %}"> 
               <button class="btn btn-default" aria-label="Left Align" >
-                <a href = "{% url 'prediction_detail_view' obj.name %}"> {% bs_icon 'box-arrow-up-right'%}</a>
+                {% bs_icon 'box-arrow-up-right'%}
               </button>
+            </a>
           </div>
         </div>
         <div class="lecteur">

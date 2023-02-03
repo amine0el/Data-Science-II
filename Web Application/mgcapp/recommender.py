@@ -10,8 +10,9 @@ from mgcapp.models import Document
 from MGC.settings import BASE_DIR
 from mutagen.easyid3 import EasyID3
 
-def read_features():
-    documents = Document.objects.last()
+def read_features(name):
+    documents = Document.objects.filter(name__icontains=name)
+    documents = documents[0]
     if(".mp3" in documents.name):
         audio = EasyID3(documents.document.path)
         audio.delete()
@@ -99,11 +100,11 @@ def extract(filedir, name, length):
     return pd.DataFrame([mdict])
 
 
-def get_extraction_similarity(type):
+def get_extraction_similarity(type,name):
     # Read data
     path = str(BASE_DIR) + '/mgcapp/'
     if type == "best":
-        data = read_features()
+        data = read_features(name)
         data.to_csv(path + "features_last_full_song.csv")
         data = data.set_index('name')
         data = data.drop(columns=['filedir'])
