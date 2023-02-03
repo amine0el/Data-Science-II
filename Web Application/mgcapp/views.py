@@ -140,8 +140,8 @@ def recommender_view_worst(request,name):
     recom_series = get_extraction_similarity("worst",name)
     documents = Document.objects.filter(name__icontains=name)
     documents = documents[0]
-    print(documents.document.url)
-    path = path = '/media/fma_medium_unsortiert/'
+
+    path = '/media/fma_medium_unsortiert/'
 
     output = "Take a look at these songs, they are completely different!\n\n"
     output += "Songname \t\t\t\t Similarity\n"
@@ -153,7 +153,7 @@ def recommender_view_worst(request,name):
         song_data.append(path + str(recom_series.keys()[i][1]) + ".mp3")
         songfiles.append(song_data)
         
-    return render(request, 'mgcapp/recommender.html', {
+    return render(request, 'mgcapp/discommender.html', {
         'recommendation_text' : output,
         'songfiles': songfiles,
         'document': documents,
@@ -165,7 +165,7 @@ def recommender_view(request, name):
     recom_series = get_extraction_similarity("best",name)
     documents = Document.objects.filter(name__icontains=name)
     documents = documents[0]
-    print(documents.document.url)
+
     path = '/media/fma_medium_unsortiert/'
 
     output = "Here are five similiar songs to the Song \"" + str(documents.name) + "\" :\n\n"
