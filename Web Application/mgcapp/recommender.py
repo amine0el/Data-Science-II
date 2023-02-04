@@ -1,4 +1,18 @@
-# Libraries
+
+# GenRec - The Smash Group
+    # Music Genre Recommender and Classifier
+    # Project during Data Science 2
+    # WiSe 2022/2023
+    # TU Darmstadt
+
+# File recommender.py
+    # Description: 
+        # Main Page of the Recommender Logic behind GenRec. 
+        # The recommender is based on the cosine similarity. During the prediction side the full song is extracted and a button to the recommender page is displayed.
+        # This file imports the features from the FMA Database and combines it with the new song.
+        # After running the cosine similarity the 5 similiar/non-similar songs are returned to the user.
+
+# Import Libraries
 import IPython.display as ipd
 import pandas as pd
 import numpy as np
@@ -10,6 +24,8 @@ from mgcapp.models import Document
 from MGC.settings import BASE_DIR
 from mutagen.easyid3 import EasyID3
 
+# Function used to extract the features of a saved full song in the background
+    # returns: dataframe with features
 def read_features(name):
     documents = Document.objects.filter(name__icontains=name)
     documents = documents[0]
@@ -20,11 +36,9 @@ def read_features(name):
    
     length = librosa.get_duration(filename=documents.document.path)
     df = extract(documents.document.path, documents.name, length)
-   
-
     return df
 
-
+# Function extract all features of one Song
 def extract_one_feature(y, sr):
     # ________ chroma_stft _______
     chroma_stft = librosa.feature.chroma_stft(y=y, sr=sr)
@@ -89,7 +103,8 @@ def extract_one_feature(y, sr):
 
     return mdict
 
-
+# Function uses the extract_one_feature-Function and adds name column to it
+    # returns dataframe with features
 def extract(filedir, name, length):
     y, sr = librosa.load(filedir, duration=length-1)
     mdict_ = extract_one_feature(y, sr)
@@ -99,9 +114,13 @@ def extract(filedir, name, length):
     mdict.update(mdict_)
     return pd.DataFrame([mdict])
 
-
+# Main Function of the recommender:
+    # Description: Reads in the FMA database features and combines it with the extracted features. 
+    # The cosine simlarity matrix is filtered and sorted
+    # returns the five top entries in the list
 def get_extraction_similarity(type,name):
-    # Read data
+    
+    # Read data from FMA database and last full song
     path = str(BASE_DIR) + '/mgcapp/'
     if type == "best":
         data = read_features(name)
@@ -112,10 +131,9 @@ def get_extraction_similarity(type,name):
         data = pd.read_csv(path + "features_last_full_song.csv", index_col='name')
         data = data.drop(columns=['filedir', 'Unnamed: 0'])
     
-    
     df_extraction = pd.read_csv(path +'extraction_fma_full.csv', index_col=['name', 'filename'])
+
     # Drop labels from original dataframe
-    #print(df_extraction.index.get_level_values(level=0))
     df_extraction = df_extraction.drop(
         columns=['Unnamed: 0', 'filedir', 'genre', 'length'])
 
@@ -125,7 +143,6 @@ def get_extraction_similarity(type,name):
     data_scaled = preprocessing.scale(df_combined)
 
     similarity = cosine_similarity(data_scaled)
-    # print("Similarity shape:", similarity.shape)
 
     # Convert into a dataframe and then set the row index and column names as labels
     sim_df_labels = pd.DataFrame(similarity)
@@ -139,18 +156,7 @@ def get_extraction_similarity(type,name):
     else:
         series = sim_df_names[data.index[0]].sort_values(ascending=True)
 
-    # Remove cosine similarity == 1 (songs will always have the best match with themselves)
-
     # Display the 5 top matches
-    # print("\n*******\nSimilar songs to ", name)
     return series.head(5)
 
-# def play_similar_song():
-#     #index = 1;
-#     #if(index > 5):
-#     #return "Index out of bounds, please stay below 5!"
-#     return "Playing: " + similar_song.index[index -1]
-#     #song_genre = similar_song.index[index -1]
-#     #song_genre = song_genre.split('.')
-#     #songname = similar_song.index[0].split('.')
-#     #ipd.Audio(f'{general_path}/genres_original/' + song_genre[0] + '/' + song_genre[0] + "." + songname[1] + '.wav')
+

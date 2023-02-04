@@ -86,8 +86,6 @@ def extraction_view(request):
         data = request.POST
         action = data.get("type")
         if action == "recommender":
-            
-            
             return redirect('recommender')
         else: 
             return render(request, 'mgcapp/recommender.html', {
@@ -117,7 +115,9 @@ def extraction_view(request):
         'document': documents,
         'genre_info': genre_info
     })
-    
+
+# Function used to repredict song which has no prediction in the database
+    # Description: Function makes a feature extraction and saves all necessary data to the database
 def repredict(documents):
    
     extract_and_save(documents.document.path,documents.name)
@@ -135,7 +135,9 @@ def repredict(documents):
     return documents, genre_info
 
     
-    
+# Function used to recommend the worst fitting song
+    # Description: Is based on the recommender view but has different text and logic in it
+    # returns: Redirect to html discommender page   
 def recommender_view_worst(request,name):
     recom_series = get_extraction_similarity("worst",name)
     documents = Document.objects.filter(name__icontains=name)
@@ -161,6 +163,10 @@ def recommender_view_worst(request,name):
         'discommender': True
     })
 
+# Function used to recommend the similar songs
+    # Description: Uses the logic in the recommender.py to construct a preformated string and send it back to the user. 
+    # The string contains the top 5 songs with their name and location
+    # returns: Redirect to html recommender page   
 def recommender_view(request, name):
     recom_series = get_extraction_similarity("best",name)
     documents = Document.objects.filter(name__icontains=name)
