@@ -301,19 +301,20 @@ def get_binned_static():
         if proba[i][proba[i].argmax()] < percentage:
             list.append(i)
         i += 1
+ 
 # Delete the elements and resize the list
     proba = np.delete(proba, list, axis=0)
     preds = np.delete(preds, list, axis=0)
-
+  
     text += repr(len(preds))+" single parts of the song \"" + \
         str(name[0]) + \
         "\" predicted. \n\nHere are the Predictions grouped by Genres: \n"
 
     # Print all predictions binned on the genres
     for i in range(len(my_dict)):
-        if i < len(np.bincount(preds)):
+        if i in preds:
             text = text + my_dict[i] + ": " + repr(np.bincount(preds)[i]) + " (" + repr(
-                round(np.bincount(preds)[i]/len(preds)*100, 1)) + "%) \n"
+            round(np.bincount(preds)[i]/len(preds)*100, 1)) + "%) \n"
 
     # Use the frequent value as main prediction:
     prediction = my_dict[np.bincount(preds).argmax()]
