@@ -29,8 +29,8 @@
         </div>
         <!-- Add Play-Button to play the uploaded song, based on path of songs in database-->
         <div class="col-sm-9 bg-light p-3 rounded-5">
-          <audio controls="" name="media" style="width: 600px">
-            <source src="{{document.document.url}}" type="audio/x-wav" autostart="false">
+          <audio class="fc-media"  controls="" name="media" style="width: 600px">
+            <source src="{{document.document.url}}" type="audio/mp3" autostart="false">
           </audio>
         </div>
         {% endif %}
@@ -48,7 +48,7 @@
     <pre>
     {% for names,files in songfiles %}
     <b>{{ names }}</b>
-    <audio controls="" name="media" style="width: 400px">
+    <audio class="fc-media"  controls="" name="media" style="width: 400px">
       <source src="{{files}}" type="audio/mp3" autostart="false">
     </audio>
     {% endfor %}
